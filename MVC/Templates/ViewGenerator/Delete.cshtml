@@ -1,0 +1,152 @@
+﻿@inherits Microsoft.VisualStudio.Web.CodeGeneration.Templating.RazorTemplateBase
+@using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore
+@using System.Collections.Generic
+@using System.Linq
+@{
+    var viewModel = "@model " + Model.ViewDataTypeName.Split('.')[Model.ViewDataTypeName.Split('.').Length - 1] + "Response";
+    var viewDataTypeName = Model.ViewDataTypeName.Split('.')[Model.ViewDataTypeName.Split('.').Length - 1];
+}
+@viewModel
+
+@@* Generated from Custom MVC Template. *@@
+@@* Model namespace using directive should be added to _ViewImports.cshtml. *@@
+
+@{
+@:@@{
+    @:var containerDivClass = "container"; // "container-fluid" can be used for full width
+@:}
+    if (Model.IsPartialView)
+    {
+    }
+    else if (Model.IsLayoutPageSelected)
+    {
+@:@@{
+    @:/*
+    @:ViewBag and ViewData are the same collection (dictionary).
+    @:They carry extra data other than the model from a controller action to its view, or between views.
+    @:The value assigned will be shown in Views\Shared\_Layout.cshtml view's title tag of the head tag.
+    @:*/
+    @:ViewData["Title"] = "@viewDataTypeName Delete";
+        if (!string.IsNullOrEmpty(Model.LayoutPageFile))
+        {
+    @:Layout = "@Model.LayoutPageFile";
+        }
+@:}
+@:
+@:<div class="@@containerDivClass">
+    @:<h1>@@ViewData["Title"]</h1>
+    @:<hr />
+@:</div>
+@:
+    }
+    else
+    {
+@:@@{
+    @:Layout = null;
+@:}
+@:
+@:<!DOCTYPE html>
+@:
+@:<html>
+@:<head>
+    @:<meta name="viewport" content="width=device-width" />
+    @:<title>@viewDataTypeName Delete</title>
+@:</head>
+@:<body>
+    }
+}
+@{
+@:@@if (Model is not null)
+@:{
+@:<div class="@@containerDivClass">
+    @:@@if (TempData["Message"] is not null)
+    @:{
+    @:/*
+    @:TempData is used to carry extra data to the redirected controller action's view.
+    @:*/
+    @:<p class="text-danger">
+        @:@@TempData["Message"]
+    @:</p>
+    @:}
+    @:<h3 class="text-danger">Are you sure you want to delete?</h3>
+    @:<hr />
+Dictionary<string, IPropertyMetadata> propertyLookup = ((IModelMetadata)Model.ModelMetadata).Properties.ToDictionary(x => x.PropertyName, x => x);
+Dictionary<string, INavigationMetadata> navigationLookup = ((IModelMetadata)Model.ModelMetadata).Navigations.ToDictionary(x => x.AssociationPropertyName, x => x);
+
+foreach (var item in Model.ModelMetadata.ModelType.GetProperties())
+{
+if (item.Name != "Guid" && item.Name != "IsDeleted" && item.Name != "CreateDate"
+    && item.Name != "CreatedBy" && item.Name != "UpdateDate" && item.Name != "UpdatedBy")
+{
+    if (propertyLookup.TryGetValue(item.Name, out IPropertyMetadata property)
+        && property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey)
+    {
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @@Html.DisplayNameFor(model => model.@GetValueExpression(property))
+        </div>
+        <div class="col-10">
+            @@Html.DisplayFor(model => model.@GetValueExpression(property))
+        </div>
+    </div>
+    }
+    else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation))
+    {
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
+        </div>
+        <div class="col-10">
+            @@Html.DisplayFor(model => model.@GetValueExpression(navigation))
+        </div>
+    </div>
+    }
+}
+}
+@:
+@:@@* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. 
+@:    Raw HTML Helper is used in case string parameter may have HTML tags. *@@
+    @:@@*
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            <b>@@Html.DisplayNameFor(model => model.Entitys)</b>
+        </div>
+        <div class="col-10">
+            @@Html.Raw(Model.Entitys)
+        </div>
+    </div>
+    @:*@@
+@:
+    @:<hr />
+    @:<form asp-action="@Model.ViewName">
+	    @:@@Html.AntiForgeryToken()
+        foreach (var property in Model.ModelMetadata.Properties)
+        {
+            if(property.IsPrimaryKey)
+            {
+        @:<input type="hidden" asp-for="@GetValueExpression(property)" />
+            }
+        }
+        @:<input type="submit" value="Yes" class="btn btn-danger" />&nbsp;&nbsp;
+        @:<a asp-action="Index" class="btn btn-outline-danger">No</a>
+    @:</form>
+@:</div>
+@:}
+    if (!Model.IsPartialView && !Model.IsLayoutPageSelected)
+    {
+@:</body>
+@:</html>
+    }
+}
+@functions
+{
+    string GetValueExpression(IPropertyMetadata property)
+    {
+        return property.PropertyName;
+    }
+
+    string GetValueExpression(INavigationMetadata navigation)
+    {
+        return navigation.AssociationPropertyName;
+    }
+}

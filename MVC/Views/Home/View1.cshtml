@@ -1,0 +1,54 @@
+﻿@* Model object type declaration according to the type returned by the action (View1). *@
+@model string
+
+@* 
+    This is a Razor comment.
+    Razor syntax provides the usage of HTML and C# together in views.  
+  
+    In order to switch to C# in HTML, @ is used.  
+   
+    C# code blocks can be written in @{ ... }, for example  
+    @{  
+        var name = "Cagil Alsac";  
+    }  
+    and the value of the name variable can be printed in HTML like  
+    <h1>@name</h1>  
+  
+    Other C# code blocks such as if, foreach, etc. can be written like  
+    @if (true)  
+    {  
+        <label>Success.</label>  
+    }  
+    else  
+    {  
+        <label>Error!</label>  
+    }  
+  
+    @foreach (string item in list)  
+    {  
+        <p>@item</p>  
+    }  
+*@
+
+<p>
+    @* Model object of type string to print the assigned and returned value in the action (View1). *@
+    @Model
+</p>
+
+@*
+    ViewData and ViewBag are the same collection (dictionary).
+    They carry extra data other than the model object from a controller action to its view, or between views.
+    ViewData["Text"] can also be used instead of ViewBag.Text.
+*@
+@if (ViewBag.Text is not null) // If Text key of the ViewData dictionary has a value, print the value in HTML
+{
+    <hr />
+    <p>@ViewBag.Text</p>
+}
+
+@* TempData carries data from an action to the redirected action, therefore to the redirected action's view. *@
+@if (TempData["Message"] is not null) // If Message key of the TempData dictionary has a value, print the value in HTML
+{
+    <hr />
+    <p>@TempData["Message"]</p>
+}

@@ -1,0 +1,52 @@
+﻿@model CategoryRequest
+
+@{
+    ViewBag.Title = "Edit Category";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<p class="text-success">
+    @ViewBag.Message
+</p>
+
+@* Show the form if category request Model object is not returned null from the Edit action of Categories controller *@
+@if (Model is not null)
+{
+    @* HTML form for sending category request data to the Categories controller's Update POST action. *@
+    <form asp-action="Edit">
+
+        @* Way 1: HTML Helper *@
+        @* @Html.HiddenFor(categoryRequest => categoryRequest.Id) *@
+        @* Way 2: Tag Helper, we need to send the CategoryRequest Model's Id property value to the post Edit action for the update operation *@
+        <input type="hidden" asp-for="Id" />
+
+        <div class="row">
+            <div class="col-2">
+                <label asp-for="Title"></label>
+            </div>
+            <div class="col-10">
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <label asp-for="Description"></label>
+            </div>
+            <div class="col-10">
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="offset-2 col-10">
+                <button type="submit" class="btn btn-primary">Update</button>
+                &nbsp;
+                <button type="reset" class="btn btn-outline-primary">Reset</button>
+            </div>
+        </div>
+    </form>
+}
+<hr />
+<a asp-action="Index" class="btn btn-outline-warning">Back to Category List</a>

@@ -1,0 +1,68 @@
+﻿@model CategoryRequest
+
+@{
+    ViewBag.Title = "Create Category";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<p class="text-success">
+    @ViewBag.Message
+</p>
+
+@* HTML form for sending category request data to the Categories controller's Create POST action. *@
+@* asp-controller="Categories" can also be added, method HTML attribute can also be assigned as get or post, post is default for form Tag Helper *@
+<form asp-action="Create"> @* will render the form tag as: <form action="/categories/create" method="post"> *@
+
+    <div class="row">
+        <div class="col-2">
+
+            @* Way 1: HTML Helper *@
+            @* @Html.LabelFor(categoryRequest => categoryRequest.Title) *@
+            @* Way 2: Tag Helper, will render the label tag with text as property's DisplayName if defined, otherwise property's name: 
+                <label>Title</label> *@
+            <label asp-for="Title"></label> 
+
+        </div>
+        <div class="col-10">
+
+            @* Way 1: HTML Helper, the second parameter is an anonymous type to assign HTML attributes, 
+                class is escaped with @ since it is a reserved word in C# *@
+            @* @Html.TextBoxFor(categoryRequest => categoryRequest.Title, new { @class = "form-control" })) *@
+            @* Way 2: Tag Helper, will render the text input tag with value as property's value if any, otherwise empty: 
+                e.g. <input type="text" Name="Title" class="form-control" value="Computer" /> *@
+            <input asp-for="Title" class="form-control" /> 
+
+            @* Way 1: HTML Helper *@
+            @* @Html.ValidationMessageFor(categoryRequest => categoryRequest.Title, null, new { @class = "text-danger" }) *@
+            @* Way 2: Tag Helper, will render the span tag with text as property's data annotation error message if any: 
+                e.g. <span class="text-danger">The Title field is required.</span> *@
+            <span asp-validation-for="Title" class="text-danger"></span> 
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <label asp-for="Description"></label>
+        </div>
+        <div class="col-10">
+
+            @* Way 1: HTML Helper *@
+            @* @Html.TextAreaFor(categoryRequest => categoryRequest.Description, new { @class = "form-control", rows = "3" }) *@
+            @* Way 2: Tag Helper, will render the text area tag with value as property's value if any, otherwise empty: 
+                e.g. <textarea class="form-control" rows="3">Desktops, laptops and servers.</textarea> *@
+            <textarea asp-for="Description" class="form-control" rows="3"></textarea> 
+
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="offset-2 col-10">
+            <button type="submit" class="btn btn-info">Create</button>
+            &nbsp;
+            <button type="reset" class="btn btn-outline-info">Reset</button>
+            &nbsp;
+            <a asp-action="Index" class="btn btn-outline-secondary">Back to Category List</a>
+        </div>
+    </div>
+</form>

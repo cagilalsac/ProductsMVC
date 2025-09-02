@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    @* Set in views to show the title string values *@
+    <title>@ViewData["Title"] - Products MVC</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MVC.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+
+        @* Bootstrap Navbar: top menu *@
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+
+            @* 
+            Bootstrap container-fluid class is used for a responsive full-width (without any padding from left and right) div.
+            Bootstrap container class is used for a responsive fixed-width (with some padding from left and right) div.
+            *@
+
+            <div class="container-fluid"> 
+
+                @* 
+                Tag Helper: Tag Helpers enable server-side code to participate in creating and rendering HTML elements in Razor views. 
+                They look like standard HTML tags but add special attributes such as asp-controller, asp-action, asp-area, asp-route, 
+                asp-for, etc. that are processed on the server to generate dynamic content. 
+                Will create the HTML link <a href="/Home/Index" class="navbar-brand">Products MVC</a> 
+                *@
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Products MVC</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+
+                        @* Links directing to Home controller example actions: *@
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="View1">View1</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="View2">View2</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" target="_blank" asp-area="" asp-controller="Home" asp-action="Content1">Content1</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" target="_blank" asp-area="" asp-controller="Home" asp-action="Content2">Content2</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Redirect1">Redirect1</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" target="_blank" asp-area="" asp-controller="Home" asp-action="NotFound1">NotFound1</a>
+                        </li>
+
+                        @* Links for the application: *@
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="CategoriesObsolete" asp-action="Index">Categories (Obsolete)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Stores" asp-action="Index">Stores</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    @* class changed from container to container-fluid to use full-width for the views *@
+    <div class="container-fluid"> 
+
+        <main role="main" class="pb-3">
+
+            @* Renders the views' content returned by controllers' actions *@
+            @RenderBody() 
+
+        </main>
+    </div>
+    <footer class="border-top footer text-muted">
+
+        @* class changed from container to container-fluid to use full-width for the footer *@
+        <div class="container-fluid">
+
+            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @* 
+    Renders the optional Scripts section in the views which contains extra Javascript or jQuery codes, 
+    generally for using third-party Javascript-CSS client side libraries. 
+    Since the required parmeter is false, there must not be a Scripts secion in every view.
+    *@
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

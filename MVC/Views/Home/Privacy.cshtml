@@ -1,0 +1,17 @@
+﻿@{
+    /*
+    ViewData and ViewBag are the same collection (dictionary).
+    They carry extra data other than the model object from a controller action to its view, or between views.
+    The value assigned will be shown in Views/Shared/_Layout.cshtml view's title tag of the head tag.
+    */
+    ViewData["Title"] = "Privacy Policy";
+}
+
+@* Will print the "Privacy Policy" value assigned to the Title key of the ViewData dictionary above *@
+<h1>@ViewData["Title"]</h1> 
+
+@* 
+The date and time value will be retrieved from the server when DateTime.Now is executed
+and the Year part of the DateTime struct will be printed in the paragraph tag.
+*@
+<p>&copy; @DateTime.Now.Year - Cagil Alsac</p>

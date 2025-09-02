@@ -1,0 +1,208 @@
+﻿@inherits Microsoft.VisualStudio.Web.CodeGeneration.Templating.RazorTemplateBase
+@using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore
+@using System.Collections.Generic
+@using System.Linq
+@{
+    var viewModel = "@model " + Model.ViewDataTypeName.Split('.')[Model.ViewDataTypeName.Split('.').Length - 1] + "Request";
+    var viewDataTypeName = Model.ViewDataTypeName.Split('.')[Model.ViewDataTypeName.Split('.').Length - 1];
+    bool dateTimePickerFound = false;
+}
+@viewModel
+
+@@* Generated from Custom MVC Template. *@@
+@@* Model namespace using directive should be added to _ViewImports.cshtml. *@@
+
+@{
+@:@@{
+    @:var containerDivClass = "container"; // "container-fluid" can be used for full width
+    @:var dateTimePickerClass = "datetimepicker"; // "jquery-datetimepicker" must be added as client side library
+@:}
+    if (Model.IsPartialView)
+    {
+    }
+    else if (Model.IsLayoutPageSelected)
+    {
+@:@@{
+    @:/*
+    @:ViewBag and ViewData are the same collection (dictionary).
+    @:They carry extra data other than the model from a controller action to its view, or between views.
+    @:The value assigned will be shown in Views\Shared\_Layout.cshtml view's title tag of the head tag.
+    @:*/
+    @:ViewData["Title"] = "@viewDataTypeName Edit";
+        if (!string.IsNullOrEmpty(Model.LayoutPageFile))
+        {
+    @:Layout = "@Model.LayoutPageFile";
+        }
+@:}
+@:
+@:<div class="@@containerDivClass">
+    @:<h1>@@ViewData["Title"]</h1>
+    @:<hr />
+@:</div>
+@:
+    }
+    else
+    {
+@:@@{
+    @:Layout = null;
+@:}
+@:
+@:<!DOCTYPE html>
+@:
+@:<html>
+@:<head>
+    @:<meta name="viewport" content="width=device-width" />
+    @:<title>@viewDataTypeName Edit</title>
+@:</head>
+@:<body>
+    }
+@:@@if (Model is not null)
+@:{
+@:<div class="@@containerDivClass">
+    @:@@if (TempData["Message"] is not null)
+    @:{
+    @:/*
+    @:TempData is used to carry extra data to the redirected controller action's view.
+    @:*/
+    @:<p class="text-danger">
+        @:@@TempData["Message"]
+    @:</p>
+    @:}
+    @:<form asp-action="@Model.ViewName" autocomplete="off">
+	    @:@@Html.AntiForgeryToken()
+        @:<div asp-validation-summary="All" class="text-danger"></div> @@* Use ModelOnly instead of All to see only service response messages in validation summary *@@
+foreach (PropertyMetadata property in Model.ModelMetadata.Properties)
+{
+if (property.PropertyName != "Guid" && property.PropertyName != "IsDeleted" && property.PropertyName != "CreateDate"
+    && property.PropertyName != "CreatedBy" && property.PropertyName != "UpdateDate" && property.PropertyName != "UpdatedBy")
+{
+    if (property.IsPrimaryKey)
+    {
+        @:<input type="hidden" asp-for="@property.PropertyName" />
+        continue;
+    }
+    if (property.Scaffold)
+    {
+        if (property.IsReadOnly)
+        {
+            continue;
+        }
+        if (property.IsForeignKey)
+        {
+        @:<div class="row mb-3">
+            @:<label asp-for="@property.PropertyName" class="col-2 col-form-label fw-bold"></label>
+            @:<div class="col-10">
+	            @:<select asp-for="@property.PropertyName" class="form-select" asp-items="ViewBag.@property.PropertyName">
+		            @:<option value="">-- Select --</option>
+	            @:</select>
+	            @:<span asp-validation-for="@property.PropertyName" class="text-danger"></span>
+            @:</div>
+        @:</div>
+            continue;
+        }
+        if (property.TypeName.Equals(typeof(bool).FullName) || property.TypeName.Equals(typeof(bool?).FullName))
+        {
+        @:<div class="row mb-3">
+		    @:<label asp-for="@property.PropertyName" class="col-2 col-form-label fw-bold"></label>
+		    @:<div class="col-10 pt-2">
+			    @:<input class="form-check-input" asp-for="@property.PropertyName" />
+            @:</div>
+        @:</div>
+        }
+        else if (property.IsEnum && !property.IsEnumFlags)
+        {
+        @:<div class="row mb-3">
+            @:<label asp-for="@property.PropertyName" class="col-2 col-form-label fw-bold"></label>
+	        @:<div class="col-10">
+		        @:<select asp-for="@property.PropertyName" class="form-select">
+			        @:<option value="@@((int)Enum.Value1)">@@Enum.Value1</option>
+			        @:<option value="@@((int)Enum.Value2)">@@Enum.Value2</option>
+		        @:</select>
+		        @:<span asp-validation-for="@property.PropertyName" class="text-danger"></span>
+	        @:</div>
+        @:</div>
+        }
+        else if (property.TypeName.Equals(typeof(DateTime).FullName) || property.TypeName.Equals(typeof(DateTime?).FullName))
+        {
+            dateTimePickerFound = true;
+        @:<div class="row mb-3">
+            @:<label asp-for="@property.PropertyName" class="col-2 col-form-label fw-bold"></label>
+	        @:<div class="col-10">
+		        @:<input asp-for="@property.PropertyName" class="form-control @@dateTimePickerClass" type="text" />
+		        @:<span asp-validation-for="@property.PropertyName" class="text-danger"></span>
+	        @:</div>
+        @:</div>
+        }
+        else
+        {
+        @:<div class="row mb-3">
+            @:<label asp-for="@property.PropertyName" class="col-2 col-form-label fw-bold"></label>
+	        @:<div class="col-10">
+	            @:<input asp-for="@property.PropertyName" class="form-control" />
+		        @:<span asp-validation-for="@property.PropertyName" class="text-danger"></span>
+	        @:</div>
+        @:</div>
+        }
+    }
+}
+}
+@:
+@:@@* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. *@@
+        @:@@*
+        @:<div class="row mb-3">
+            @:<label asp-for="EntityIds" class="col-2 col-form-label fw-bold"></label>
+	        @:<div class="col-10">
+		        @:<select multiple asp-for="EntityIds" class="form-select" asp-items="ViewBag.EntityIds"></select>
+		        @:<span asp-validation-for="EntityIds" class="text-danger"></span>
+	        @:</div>
+        @:</div>
+        @:*@@
+@:
+        @:<hr />
+        @:<div class="row mb-3">
+	        @:<div class="offset-2 col-10">
+                @:<button type="submit" class="btn btn-primary">Save</button>
+		        @:&nbsp;&nbsp;
+                @:<button type="reset" class="btn btn-outline-primary">Reset</button>
+		        @:&nbsp;&nbsp;
+                @:<a asp-action="Delete" asp-route-id="@@Model.Id">Delete</a>
+                @:&nbsp;&nbsp;
+		        @:<a asp-action="Index">Back to List</a>
+	        @:</div>
+        @:</div>
+    @:</form>
+@:</div>
+@:}
+}
+@{
+@:
+@:@@section Scripts {
+    @:@@* Can be uncommented to use client-side validation using jQuery instead of server-side validation. *@@
+    @:@@*<partial name="_ValidationScriptsPartial" />*@@
+
+if (dateTimePickerFound)
+{
+    @:
+    @:@@* https://xdsoft.net/jqplugins/datetimepicker *@@
+    @:<link href="~/lib/jquery-datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    @:<script src="~/lib/jquery-datetimepicker/jquery.datetimepicker.full.min.js"></script>
+    @:<script>
+        @:$(function () {
+            @:$(".datetimepicker").datetimepicker({
+                @:// for using only date
+                @:timepicker: false,
+                @:format: 'm/d/Y'
+                @:// for using date with time
+                @:// timepicker: true,
+                @:// format: 'm/d/Y H:i'
+            @:});
+        @:});
+    @:</script>
+}
+@:}
+    if (!Model.IsPartialView && !Model.IsLayoutPageSelected)
+    {
+@:</body>
+@:</html>
+    }
+}

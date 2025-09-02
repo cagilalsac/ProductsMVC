@@ -1,0 +1,114 @@
+﻿@* Way 1: *@
+@* @model List<APP.Models.CategoryResponse> *@
+@* Way 2: the Model's type's (CategoryResponse) namespace (APP.Models) can be added to Views/_ViewImports.cshtml so only Model type can be used *@
+@* @model List<CategoryResponse> *@
+@* Way 3: in order to use the display names of Model's properties, Model type must be defined in IEnumerable, which List class implements *@
+@model IEnumerable<CategoryResponse>
+
+@{
+    ViewBag.Title = "Category List";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<p class="text-success">
+    @ViewBag.Count
+</p>
+
+@* For showing the operation result message set in the Create and Delete POST actions of Categories controller. 
+   Since TempData["Message"] is not set in other actions, it may be null here. So we need to check whether it is null or not. *@
+@if (TempData["Message"] is not null)
+{
+    <p class="bg-warning text-black">
+        @TempData["Message"]
+    </p>
+}
+
+<table class="table">
+    <tr>
+        <th>
+
+            @* Way 1: *@
+            @* Title *@
+            @* Way 2: instead of writing static text for headers, the DisplayNameFor HTML Helper should be used to get the DisplayName 
+               attribute's value of the property if defined, otherwise the property name (Title) will be written *@
+            @Html.DisplayNameFor(categoryResponse => categoryResponse.Title)
+
+            @*
+                Some commonly used HTML Helpers in ASP.NET Core MVC:
+                We will use mostly Tag Helpers other than the HTML Helpers DisplayNameFor and DisplayFor.
+                These helpers use lambda expressions to bind directly to model properties, providing compile-time safety and IntelliSense.
+                @Html.LabelFor(model => model.Property)
+                    Generates a <label> for the specified property.
+                @Html.DisplayNameFor(model => model.Property)
+                	Renders the display name of the property, using the [DisplayName] attribute if set, otherwise the property name.
+                @Html.TextBoxFor(model => model.Property)
+                	Generates a <input type="text"> for the property.
+                @Html.TextAreaFor(model => model.Property)
+                	Generates a <textarea> for the property.
+                @Html.EditorFor(model => model.Property)
+                	Generates the most appropriate input element based on the property type and data annotations.
+                @Html.DisplayFor(model => model.Property)
+                	Renders a display-only view of the property (e.g., as plain text).
+                @Html.CheckBoxFor(model => model.Property)
+                	Generates a checkbox for boolean properties.
+                @Html.DropDownListFor(model => model.Property, selectList)
+                	Generates a dropdown list for the property.
+                @Html.ListBoxFor(model => model.Property, multiSelectList)
+                	Generates a multi-select list box for the property.
+                @Html.HiddenFor(model => model.Property)
+                	Generates a hidden input field for the property.
+                @Html.PasswordFor(model => model.Property)
+                	Generates a password input field for the property.
+                @Html.ValidationMessageFor(model => model.Property)
+                	Displays validation error messages for the property.
+                @Html.Raw(string)
+                	Renders raw HTML markup from a string (only use with trusted content to avoid XSS vulnerabilities).
+            *@
+
+        </th>
+        <th>
+
+            @* The property name will be written since there is no DisplayName attribute defined for the Description property like the Title property *@
+            @Html.DisplayNameFor(categoryResponse => categoryResponse.Description)
+
+        </th>
+        <th>
+            Operation Links
+        </th>
+    </tr>
+    @foreach (CategoryResponse item in Model)
+    {
+        <tr>
+            <td>
+
+                @* Way 1: CategoryResponse item's Title property value will be written *@
+                @* @item.Title *@
+                @* Way 2: the DisplayFor HTML Helper can also be used to write the values of the properties *@
+                @Html.DisplayFor(categoryResponse => item.Title)
+
+            </td>
+            <td>
+                @Html.DisplayFor(categoryResponse => item.Description)
+            </td>
+            <td>
+
+                @* Way 1: HTML Helper *@
+                @* "Categories" controller name can also be provided after the second parameter, the third parameter is the anonymous type 
+                   route value which will be used to send the CategoryResponse item's Id property value to the Details action's id parameter *@
+                @* @Html.ActionLink("Category Details", "Details", new { id = item.Id }) *@
+                @* Way 2: Tag Helper *@
+                @* asp-controller="Categories" can also be added, the route value is defined by the parameter name of the action as asp-route-id,
+                   e.g. <a href="/Categories/Details/28">Category Details</a> will be generated for the CategoryResponse item with Id 28" *@
+                <a asp-action="Details" asp-route-id="@item.Id">Category Details</a>
+
+                &nbsp;
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit Category</a>
+                &nbsp;
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete Category</a>
+            </td>
+        </tr>
+    }
+</table>
+<hr />
+<a asp-action="Create">Create New Category</a>

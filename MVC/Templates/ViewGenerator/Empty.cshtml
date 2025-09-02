@@ -1,0 +1,55 @@
+﻿@inherits Microsoft.VisualStudio.Web.CodeGeneration.Templating.RazorTemplateBase
+@using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore
+@using System.Collections.Generic
+@using System.Linq
+@@*Generated from Custom MVC Template.*@@
+
+@{
+    if (Model.IsPartialView)
+    {
+    }
+    else if (Model.IsLayoutPageSelected)
+    {
+@:@@{
+    @:/*
+    @:ViewBag and ViewData are the same collection (dictionary).
+    @:They carry extra data other than the model from a controller action to its view, or between views.
+    @:The value assigned will be shown in Views\Shared\_Layout.cshtml view's title tag of the head tag.
+    @:*/
+    @:ViewData["Title"] = "@Model.ViewName";
+        if (!string.IsNullOrEmpty(Model.LayoutPageFile))
+        {
+    @:Layout = "@Model.LayoutPageFile";
+        }
+@:}
+@:
+@:<h1>@@ViewData["Title"]</h1>
+@:
+    }
+    else
+    {
+@:@@{
+    @:Layout = null;
+@:}
+@:
+@:<!DOCTYPE html>
+@:
+@:<html>
+@:<head>
+    @:<meta name="viewport" content="width=device-width" />
+    @:<title>@Model.ViewName</title>
+@:</head>
+@:<body>
+    }
+    if (Model.ReferenceScriptLibraries)
+    {
+@:@@section Scripts {
+    @:<partial name="_ValidationScriptsPartial" />
+@:}
+    }
+    if (!Model.IsPartialView && !Model.IsLayoutPageSelected)
+    {
+@:</body>
+@:</html>
+    }
+}

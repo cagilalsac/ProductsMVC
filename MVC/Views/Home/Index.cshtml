@@ -1,0 +1,15 @@
+﻿@{
+    /*
+    ViewData and ViewBag are the same collection (dictionary).
+    They carry extra data other than the model object from a controller action to its view, or between views.
+    The value assigned will be shown in Views/Shared/_Layout.cshtml view's title tag of the head tag.
+    */
+    // Way 1:
+    // ViewData["Title"] = "Home Page";
+    // Way 2:
+    ViewBag.Title = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to Products MVC</h1>
+</div>

@@ -1,0 +1,38 @@
+﻿@model CategoryResponse
+
+@{
+    ViewBag.Title = "Category Details";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<p class="text-success">
+    @ViewBag.Message
+</p>
+
+@* Show if category response Model object is not returned null from the Details action of Categories controller *@
+@if (Model is not null)
+{
+
+    <dl>
+        <dt>@Html.DisplayNameFor(categoryResponse => categoryResponse.Title)</dt>
+
+        @* Way 1: to write the CategoryResponse Model's Title property value *@
+        @* @Model.Title *@
+        @* Way 2: HTML Helper *@
+        <dd>@Html.DisplayFor(categoryResponse => categoryResponse.Title)</dd>
+
+        <dt>@Html.DisplayNameFor(categoryResponse => categoryResponse.Description)</dt>
+        <dd>@Html.DisplayFor(categoryResponse => categoryResponse.Description)</dd>
+    </dl>
+    @* e.g. the printed HTML will be: 
+    <dl>
+        <dt>Title</dt>
+        <dd>Computer</dd>
+        <dt>Description</dt>
+        <dd>Desktops, laptops and servers.</dd>
+    </dl> *@
+
+}
+<hr />
+<a asp-action="Index" class="btn btn-outline-dark">Back to Category List</a>
