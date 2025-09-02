@@ -42,7 +42,7 @@
     in these views according to your project.
 
   - Razor syntax provides the usage of HTML and C# together in views:  
-  
+    '''
     In order to switch to C# in HTML, @ is used.  
    
     C# code blocks can be written in @{ ... }, for example  
@@ -65,7 +65,8 @@
     @foreach (string item in list)  
     {  
         <p>@item</p>  
-    }  
+    }
+    '''
   
   - The folder names in the Views folder correspond to the controller names and the view file names correspond to the action names 
     if view name is not changed in the returned View method. If view name is changed in the returned View method, the view file name 
