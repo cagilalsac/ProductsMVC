@@ -42,7 +42,7 @@
     in these views according to your project.
 
   - Razor syntax provides the usage of HTML and C# together in views:  
-    '''
+    ```
     In order to switch to C# in HTML, @ is used.  
    
     C# code blocks can be written in @{ ... }, for example  
@@ -66,7 +66,7 @@
     {  
         <p>@item</p>  
     }
-    '''
+    ```
   
   - The folder names in the Views folder correspond to the controller names and the view file names correspond to the action names 
     if view name is not changed in the returned View method. If view name is changed in the returned View method, the view file name 
@@ -85,12 +85,14 @@
     to the created contollers' actions can be added in the Bootstrap navbar.
 
   - The layout of a view may be changed at the top code block with one of the below assignments:  
+    ```
     @{  
         Layout = "_Layout"; // _Layout.cshtml in Views/Shared folder, no need to write because defined in _ViewStart.cshtml under Views folder  
         Layout = "~/Views/Shared/_Layout.cshtml"; // can also be written  
         Layout = null; // for no layout  
         Layout = "_CustomLayout"; // if _CustomLayout.cshtml in Views/Shared folder is created to be used with the view  
     }
+    ```
 
   - Tag Helpers enable server-side code to participate in creating and rendering HTML elements in Razor views. They look like standard 
     HTML tags but add special attributes such as asp-controller, asp-action, asp-area, asp-route, asp-for, etc. that are processed 
@@ -322,33 +324,46 @@
 
     - Some commonly used HTML Helpers in ASP.NET Core MVC:  
       We will use mostly Tag Helpers other than the HTML Helpers DisplayNameFor and DisplayFor.  
-      These helpers use lambda expressions to bind directly to model properties, providing compile-time safety and IntelliSense.  
+      These helpers use lambda expressions to bind directly to model properties, providing compile-time safety and IntelliSense.
+    
       @Html.LabelFor(model => model.Property)  
-          Generates a <label> for the specified property.  
+      Generates a <label> for the specified property.
+    
       @Html.DisplayNameFor(model => model.Property)  
-      	Renders the display name of the property, using the [DisplayName] attribute if set, otherwise the property name.  
+      Renders the display name of the property, using the [DisplayName] attribute if set, otherwise the property name.
+    
       @Html.TextBoxFor(model => model.Property)  
-      	Generates a <input type="text"> for the property.  
+      Generates a <input type="text"> for the property.
+    
       @Html.TextAreaFor(model => model.Property)  
-      	Generates a <textarea> for the property.  
+      Generates a <textarea> for the property.
+    
       @Html.EditorFor(model => model.Property)  
-      	Generates the most appropriate input element based on the property type and data annotations.  
+      Generates the most appropriate input element based on the property type and data annotations.
+    
       @Html.DisplayFor(model => model.Property)  
-      	Renders a display-only view of the property (e.g., as plain text).  
+      Renders a display-only view of the property (e.g., as plain text).
+    
       @Html.CheckBoxFor(model => model.Property)  
-      	Generates a checkbox for boolean properties.  
+      Generates a checkbox for boolean properties.
+    
       @Html.DropDownListFor(model => model.Property, selectList)  
-      	Generates a dropdown list for the property.  
+      Generates a dropdown list for the property.
+    
       @Html.ListBoxFor(model => model.Property, multiSelectList)  
-      	Generates a multi-select list box for the property.  
+      Generates a multi-select list box for the property.
+    
       @Html.HiddenFor(model => model.Property)  
-      	Generates a hidden input field for the property.  
+      Generates a hidden input field for the property.
+    
       @Html.PasswordFor(model => model.Property)  
-      	Generates a password input field for the property.  
+      Generates a password input field for the property.
+    
       @Html.ValidationMessageFor(model => model.Property)  
-      	Displays validation error messages for the property.  
+      Displays validation error messages for the property.
+    
       @Html.Raw(string)  
-      	Renders raw HTML markup from a string (only use with trusted content to avoid XSS vulnerabilities).
+      Renders raw HTML markup from a string (only use with trusted content to avoid XSS vulnerabilities).
 
 ## 6. CORE Project - Generic Service
 
@@ -480,6 +495,7 @@ Note: The entities and DbContext class should be implemented first. Second, requ
     https://select2.org
 
     You need to add the following code which will convert all select tags into select2 in the Scripts section:  
+    ```
     <link href="~/lib/select2/css/select2.min.css" rel="stylesheet" />
     <script src="~/lib/select2/js/select2.min.js"></script>
     <script>
@@ -487,6 +503,7 @@ Note: The entities and DbContext class should be implemented first. Second, requ
             $("select").select2();
         });
     </script>
+    ```
 
 50. Add Products link in the nav bar (top menu) of the layout view:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.cshtml
