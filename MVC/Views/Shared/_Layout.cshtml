@@ -1,11 +1,20 @@
-﻿<!DOCTYPE html>
+﻿@{
+    @inject IConfiguration configuration
+    // This injects the IConfiguration service directly into the view making configuration settings (appsettings.json)
+    // accessible without controller dependencies. IConfiguration service may also be injected to the controllers.
+    // configuration is the local variable name that will be used in this view such as to reach the Title section
+    // of appsettings.json, configuration["Title"] will be used as below.
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     @* Set in views to show the title string values *@
-    <title>@ViewData["Title"] - Products MVC</title>
+    <title>@ViewData["Title"] - @configuration["Title"]</title> 
+    @* Changed from @ViewData["Title"] - Products MVC to use Title in appsettings.json *@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -30,7 +39,9 @@
                 asp-for, etc. that are processed on the server to generate dynamic content. 
                 Will create the HTML link <a href="/Home/Index" class="navbar-brand">Products MVC</a> 
                 *@
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Products MVC</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@configuration["Title"]</a>
+                @* Changed from <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Products MVC</a>
+                    to use Title in appsettings.json *@
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -63,17 +74,76 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="CategoriesObsolete" asp-action="Index">Categories (Obsolete)</a>
                         </li>
+
+                        @* Everyone can see the Stores link: *@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Stores" asp-action="Index">Stores</a>
                         </li>
+
+                        @* Only authenticated users can see the Products link and users in Admin role can see the Categories link: *@
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
+                            </li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+                                </li>
+                            }
+                        }
+                        
+                        @* Everyone can see the Groups link: *@
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Groups" asp-action="Index">Groups</a>
                         </li>
 
+                        @* Only authenticated users can see the Users link: *@
+                        @* Way 1: *@
+                        @* @if (User.IsInRole("Admin") || User.IsInRole("User")) *@
+                        @* Way 2: since we have only 2 roles, we don't need to check all the roles *@
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                            </li>
+
+                            @* Only users in Admin role can see the Roles link: *@
+                            if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
+                                </li>
+                            }
+                        }
+
                     </ul>
+
+                    @* User authentication links: will be displayed at the right side of the menu by the below Bootstrap classes *@
+                    <div class="navbar-text">
+                        <ul class="navbar-nav me-auto">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item pt-2 pe-2">
+                                    <span>@User.Identity.Name</span>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Register">Register</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Login</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
                 </div>
             </div>
         </nav>

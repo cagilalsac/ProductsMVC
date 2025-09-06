@@ -2,6 +2,8 @@ using APP.Domain;
 using APP.Models;
 using APP.Services;
 using CORE.APP.Services;
+using CORE.APP.Services.Authentication.MVC;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 // Create a builder for the web application and initialize configuration, logging, etc.
@@ -36,6 +38,22 @@ builder.Services.AddScoped<IService<StoreRequest, StoreResponse>, StoreService>(
 // injected controller class constructor's IService<ProductRequest, ProductResponse> parameter.
 // Injection through abstract class or interface is suitable for SOLID Principles.
 builder.Services.AddScoped<IService<ProductRequest, ProductResponse>, ProductService>();
+
+builder.Services.AddScoped<IService<GroupRequest, GroupResponse>, GroupService>();
+builder.Services.AddScoped<IService<RoleRequest, RoleResponse>, RoleService>();
+builder.Services.AddScoped<IService<UserRequest, UserResponse>, UserService>();
+
+// Register IHttpContextAccessor as a singleton service.
+// Enables access to the current HttpContext from classes other than controller classes such as services.
+// Required for services like CookieAuthService that need to read or modify HTTP context (e.g., authentication, user info).
+// Allows constructor injection of IHttpContextAccessor throughout the services of the application.
+builder.Services.AddHttpContextAccessor();
+
+// Register CookieAuthService as a scoped dependency for ICookieAuthService.
+// Scoped lifetime ensures a new instance per HTTP request, which is required for services accessing HttpContext.
+// CookieAuthService handles user authentication using cookies, supporting login and logout operations.
+// This service registration enables constructor injection of ICookieAuthService to the controllers throughout the application.
+builder.Services.AddScoped<ICookieAuthService, CookieAuthService>();
 
 /* 
  SOLID Principles:
@@ -87,6 +105,27 @@ builder.Services.AddScoped<IService<ProductRequest, ProductResponse>, ProductSer
 
 
 
+// --------------
+// Authentication
+// --------------
+// Configure authentication services using cookie-based authentication.
+// - Sets the default authentication scheme to Cookies.
+// - Specifies options for cookie authentication:
+//   - LoginPath: Path to redirect unauthenticated users (when authentication is required).
+//   - AccessDeniedPath: Path to redirect users who are authenticated but lack required permissions.
+//   - ExpireTimeSpan: Duration before the authentication cookie expires (here, 1 hour).
+//   - SlidingExpiration: Resets the expiration time on each request to keep active sessions alive.
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login"; // changed from /Users/Login to /Login since route was changed for the action
+        options.AccessDeniedPath = "/Login"; // changed from /Users/Login to /Login since route was changed for the action
+        options.ExpireTimeSpan = TimeSpan.FromHours(1);
+        options.SlidingExpiration = true;
+    });
+
+
+
 // Add support for controllers and views (MVC pattern).
 builder.Services.AddControllersWithViews();
 
@@ -125,6 +164,16 @@ app.UseStaticFiles();
 
 // Enable routing capabilities.
 app.UseRouting();
+
+
+
+// --------------
+// Authentication
+// --------------
+// Enable authentication middleware so that [Authorize] works.
+app.UseAuthentication();
+
+
 
 // Enable authorization middleware.
 app.UseAuthorization();

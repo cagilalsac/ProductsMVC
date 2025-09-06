@@ -1,5 +1,18 @@
 # Project Development Roadmap
 
+Note: The development of User and Location Management Modules will not be explained. You need to develop them as homework while learning from 
+      the Products Module.  
+      You also need to develop your own MVC Project including User Management Module for a different domain such as Movies, Books, etc. 
+      Users and optional Locations diagrams with some project example diagrams can be found at:  
+      https://need4code.com/DotNet?path=.NET%5C00_Files%5CProjects%5CDiagrams.jpg
+
+Note: A simplified version of the N-Layered Architecture and Repository Pattern that include the basic concepts and structures 
+      are applied to the project. More information about N-Layered Architecture and other architectures can be found at:  
+      https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures
+
+Note: Domain is for data access from a database, services are for business logic and MVC is for presentation. 
+      CQRS (Command Query Response Segregation) Pattern is also applied to this project.
+
 ## 1. Environment and Tools
 
 1. Visual Studio Community installation for Windows:  
@@ -223,6 +236,12 @@
 
     - Request and response model classes are also called Data Transfer Object (DTO) classes.
 
+    - Synchronous methods execute tasks one after another. Each operation must complete before the next one starts. The calling thread 
+      waits (or "blocks") until the method finishes.  
+      Asynchronous methods allow tasks to run in the background. The calling thread does not wait for the operation to finish and 
+      can continue executing other code. In C#, asynchronous methods often use the async and await keywords, enabling non-blocking operations 
+      (such as I/O or database calls) and improving application responsiveness.
+    
     - Some LINQ (Language Integrated Query) methods for querying data (async versions already exists):  
       Find: Finds an entity with the given primary key value. Returns null if not found.  
       Uses the database context's cache before querying the database.  
@@ -458,6 +477,9 @@ Note: The entities and DbContext class should be implemented first. Second, requ
     You don't have to use these templates, however if you choose not to, you need to write or modify the dependency injections 
     and actions with views.
 
+    Note: If you get any exceptions during scaffolding, create the DbFactory class in APP/Domain folder:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Domain/DbFactory.cs
+
 47. Right-click the Controllers folder then Add -> Controller -> Common -> MVC -> MVC Controller with views, using Entity Framework 
     and select Store entity as Model class, select Db as DbContext class, check Generate views, do not check Reference script libraries, 
     check Use a layout page (leave the text box below empty), and give the name StoresController as Controller name. 
@@ -470,7 +492,12 @@ Note: The entities and DbContext class should be implemented first. Second, requ
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Stores/Edit.cshtml  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Stores/Delete.cshtml
 
-    Note: Client-side validation is enabled at the bottom in Create and Edit views.
+    Note: Client-side validation through jQuery instead of Server-side validation is enabled at the bottom in Create and Edit views.
+
+    Note: Html.AntiForgeryToken() in Create, Edit and Delete views generates a hidden form field containing a unique anti-forgery token 
+    to prevent Cross-Site Request Forgery (CSRF) attacks by ensuring that form submissions originate from the web application's views.  
+    [ValidateAntiForgeryToken] attribute defined for Create, Edit and Delete post actions in the controller rejects requests with 
+    missing or invalid anti-forgery tokens, thereby enhancing the security of the web application.
 
 48. Add Stores link in the nav bar (top menu) of the layout view:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.cshtml
@@ -523,8 +550,187 @@ Note: The entities and DbContext class should be implemented first. Second, requ
 52. Add Categories link in the nav bar (top menu) of the layout view:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.cshtml
 
-53. Optionally a DatabaseController with a Seed action can be created to seed the database with initial data:  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/DatabaseController.cs
+53. Add Title and App sections in appsettings.json:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/appsettings.json
 
-    The get route changed from /Database/Seed to /SeedDb for easy execution by using the Route attribute.
+54. IConfiguration injected instance can be used in controllers or views to read configuration values from appsettings.json:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.cshtml  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Home/Index.cshtml
+
+## 8. User, Role, Group, Country and City Entities - APP Project: Source code shared in APP and MVC Projects.
+
+Note: Homework includes:  
+APP Domain: User, UserRole, Role, Group, Country and City entities with Genders enum  
+            Users, UserRoles, Roles, Groups, Countries and Cities DbSets in the Db class  
+APP Models: UserRequest, UserResponse, RoleRequest, RoleResponse, GroupRequest and GroupResponse classes  
+            CountryRequest, CountryResponse, CityRequest and CityResponse classes are optional, you don't need to do as homework  
+APP Services: UserService, RoleService and GroupService classes  
+              CountryService and CityService classes are optional, you don't need to do as homework  
+MVC Controllers: UsersController, RolesController and GroupsController classes with views  
+                 CountriesController and CitiesController classes with views are optional, you don't need to do as homework
+
+Note: If you prefer not to implement City and Country requests, responses and services, you need to remove 
+the related code in UsersController and its views.
+
+Note: Optionally a DatabaseController with a Seed action can be created to seed the database with initial data:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/DatabaseController.cs
+
+IWebHostEnvironment injected instance can be used to get the web application's running environment information such as 
+development environment or not by using IsDevelopment method.
+
+The get route changed from /Database/Seed to /SeedDb for easy execution by using the Route attribute.
+            
+Note: Check and add missing injection configurations in the Program.cs for:  
+builder.Services.AddScoped<IService<GroupRequest, GroupResponse>, GroupService>();  
+builder.Services.AddScoped<IService<RoleRequest, RoleResponse>, RoleService>();  
+builder.Services.AddScoped<IService<UserRequest, UserResponse>, UserService>();  
+https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Program.cs
+
+Note: If you prefer to implement Country and City requests, responses and services, you also need to manage injections in Program.cs.
+
+Note: Check and add missing links in the layout view:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.cshtml
+
+## 9. Cookie Authentication and Authorization - CORE Project
+
+55. Create the base authentication service class named AuthServiceBase in CORE Project's APP/Services/Authentication folder.  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/CORE/APP/Services/Authentication/AuthServiceBase.cs
+
+56. Create the cookie authentication service interface named ICookieAuthService in CORE Project's APP/Services/Authentication/MVC folder.  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/CORE/APP/Services/Authentication/MVC/ICookieAuthService.cs
+
+57. Create the cookie authentication service concrete class named CookieAuthService in CORE Project's APP/Services/Authentication/MVC folder.  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/CORE/APP/Services/Authentication/MVC/CookieAuthService.cs
+
+## 9. Cookie Authentication and Authorization - APP Project
+
+58. Under Models, create UserLoginRequest model:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/UserLoginRequest.cs
+
+59. Under Models, create UserRegisterRequest model:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/UserRegisterRequest.cs
+
+60. Add ICookieAuthService injection in the constructor with Login, Logout and Register methods at the bottom in the UserService:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Services/UserService.cs
+
+## 9. Cookie Authentication and Authorization - MVC Project
+
+61. Add  
+    builder.Services.AddHttpContextAccessor...  
+    builder.Services.AddScoped... for types ICookieAuthService and CookieAuthService  
+    builder.Services.AddAuthentication...  
+    app.UseAuthentication...  
+    in the Program.cs:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Program.cs
+
+    Note: In a controller, the HTTP Context can be directly accessed by the HttpContext property inherited from Controller base class.
+ 
+62. Add Login get and post actions with Login view, Logout get action, and Register get and post actions with Register view 
+    at the bottom of the UsersController:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/UsersController.cs  
     
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Users/Login.cshtml  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Users/Register.cshtml
+
+63. Add Login, Register and Logout links in the nav bar (top menu) of the layout view:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.cshtml
+    
+    - Authentication cookie existance can be checked by User.Identity.IsAuthenticated in controller actions and views 
+      returning the result of whether the user is signed in or not.
+
+    - The auhenticated user's user name can be reached by User.Identity.Name.
+
+    - The authenticated user's role claim value can be checked by User.IsInRole method which gets the role name string as parameter, 
+      or the role claim can be accessed by User.Claims.SingleOrDefault method which gets the predicate checking claim type 
+      equals role claim type as parameter.  
+    
+    - Examples:  
+    
+      if (User.IsInRole("Admin")) { ... }  
+    
+      Claim roleClaim = User.Claims.SingleOrDefault(claim => claim.Type == ClaimTypes.Role);  
+      if (roleClaim is not null && roleClaim.Value == "User") { ... }  
+
+      Custom claim types' values such as Id can be accessed by:  
+      int id = Convert.ToInt32(User.Claims?.Single(claim => claim.Type == "Id").Value);
+
+64. Add the [Authorize(Roles = "Admin")] attribute for Admin role on top of the RolesController class so that all of the actions can be executed 
+    by only authenticated users with role Admin:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/RolesController.cs
+ 
+    - The [Authorize] attribute in ASP.NET Core is used to control access to a controller's actions by requiring that the user is authenticated 
+      and, optionally, meets certain authorization requirements.  
+    
+      When you decorate a controller or action with [Authorize], only authenticated users who provides the Authentication Cookie or 
+      Json Web Token (used in Web APIs) can access it. Unauthenticated requests will receive a 401 Unauthorized response. In MVC, 
+      they will be redirected to the LoginPath defined in the authentication configuration in Program.cs.
+    
+      You can specify roles or policies to further restrict access. For example, [Authorize(Roles = "Admin")] allows only authenticated users 
+      in the "Admin" role.  
+    
+      You can apply [Authorize] at the controller level (to protect all actions) or at the action level.  
+    
+      Example usages:  
+      [Authorize]: Any authenticated user can access.  
+    
+      [Authorize(Roles = "User")]: Only authenticated users with role "User" can access.  
+
+      [Authorize(Roles = "Admin,User")]: Only authenticated users with the "Admin" or "User" role can access.  
+    
+      [AllowAnonymous]: Can be used to override [Authorize] at the action level and allows public access, therefore gives permission to everyone 
+      for executing specific actions.
+
+65. Add the [Authorize] attribute on top of the GroupsController class then add [AllowAnonymous] attribute on top of the Index action 
+    so that all of the actions except the Index action can be executed by only authenticated users, Index action can be executed by everyone. 
+    Then add [Authorize(Roles = "Admin")] attribute on top of the Create, Edit and Delete get and post actions so that only authenticated users 
+    with role Admin can execute these actions:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/GroupsController.cs
+
+66. Add the [Authorize(Roles = "Admin,User")] attribute on top of the Index action of the UsersController class so that 
+    authenticated users with role Admin or User can execute the Index action. Then add [Authorize(Roles = "Admin")] attribute on top of 
+    the Details, Create, Edit and Delete get and post actions so that authenticated users with role Admin can execute these actions. 
+    The Login, Logout and Register actions can be executed by everyone since no Authorize attribute is defined. However, if Authorize 
+    attribute was defined at the controller level, we should have used AllowAnonymous attribute for Login, Logout and Register actions:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/UsersController.cs
+
+67. We shouldn't show the links directing to unauthorized controller actions in the views. Therefore, we need to add if the user is in
+    Admin role in the layout view for the Roles link. We also need to check if the user is in Admin or User role 
+    (checking if user is authenticated since we have only 2 roles) for the Users link. We can show the user name and Logout link if 
+    the user is authenticated, Register and Login links if the user is not authenticated:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.cshtml
+
+68. We also should check if the user is authenticated in the Index view of the Groups since only authenticated users can execute the 
+    Details action. We should also show the Create, Edit and Delete links to the users with role Admin. In Details view, 
+    we should show the Edit and Delete links for the Admin role, and in Edit view we should show the Delete link for the Admin role:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Groups/Index.cshtml  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Groups/Details.cshtml  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Groups/Edit.cshtml
+
+69. We should check if the user is in role Admin for the Create, Details, Edit and Delete links in the Index view of the Users. 
+    We should also show the Edit and Delete links in the Details view, and Delete link in the Edit view for the Admin role:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Users/Index.cshtml  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Users/Details.cshtml  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Users/Edit.cshtml
+
+70. The Authorize attribute is also applied in the Products, Stores and Categories controllers, and authentication is checked in the 
+    layout view with the Index views of Products, Stores and Categories for showing the links. This is enough for the homeworks and projects. 
+    Modifying the links in Details and Edit views is optional:  
+  
+    - Only users in Admin role can perform category operations.  
+    - Only authenticated users can see the product list and details, users in Admin role can perform create, edit and delete operations.  
+    - Everyone can see the store list, only users in Admin role can see store details and can perform create, edit and delete operations.
+
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/ProductsController.cs  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/StoresController.cs  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/CategoriesController.cs  
+
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.cshtml  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Products/Index.cshtml  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Stores/Index.cshtml  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Categories/Index.cshtml
+
+71. Optionally you can use the Sneat Web Template for your web application to look better:  
+    https://need4code.com/DotNet/Home/Index?path=.NET%5C00_Files%5CWeb%20Templates%5CSneat.7z  
+    Extract the folders in the compressed file to your MVC Project.  
+    Then modify the _SneatLayout.cshtml according to your project.  
+    Finally, change the Layout assignment in the _ViewStart.cshtml to _SneatLayout for your views to use.

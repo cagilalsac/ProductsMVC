@@ -1,0 +1,69 @@
+﻿@model UserRegisterRequest
+
+@* Model namespace using directive should be added to _ViewImports.cshtml. *@
+
+@{
+    var containerDivClass = "container"; // "container-fluid" can be used for full width
+}
+@{
+    /*
+    ViewBag and ViewData are the same collection (dictionary).
+    They carry extra data other than the model from a controller action to its view, or between views.
+    The value assigned will be shown in Views\Shared\_Layout.cshtml view's title tag of the head tag.
+    */
+    ViewData["Title"] = "User Register";
+}
+
+<div class="@containerDivClass">
+    <h1>@ViewData["Title"]</h1>
+    <hr />
+</div>
+
+<div class="@containerDivClass">
+    @if (TempData["Message"] is not null)
+    {
+    /*
+    TempData is used to carry extra data to the redirected controller action's view.
+    */
+    <p class="text-danger">
+        @TempData["Message"]
+    </p>
+    }
+    <form asp-action="Register" autocomplete="off">
+		@Html.AntiForgeryToken()
+        <div asp-validation-summary="All" class="text-danger"></div> @* Use ModelOnly instead of All to see only service response messages in validation summary *@
+        <div class="row mb-3">
+            <label asp-for="UserName" class="col-2 col-form-label fw-bold"></label>
+			<div class="col-10">
+			    <input asp-for="UserName" class="form-control" />
+				<span asp-validation-for="UserName" class="text-danger"></span>
+			</div>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Password" class="col-2 col-form-label fw-bold"></label>
+			<div class="col-10">
+			    <input asp-for="Password" class="form-control" type="password" />
+				<span asp-validation-for="Password" class="text-danger"></span>
+			</div>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="ConfirmPassword" class="col-2 col-form-label fw-bold"></label>
+            <div class="col-10">
+                <input asp-for="ConfirmPassword" class="form-control" type="password" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+        </div>
+
+        <hr />  
+        <div class="row mb-3">
+			<div class="offset-2 col-10">
+                <button type="submit" class="btn btn-primary">Register</button>
+			</div>
+        </div>
+    </form>
+</div>  
+
+@section Scripts {
+    @* Can be uncommented to use client-side validation using jQuery instead of server-side validation. *@
+    <partial name="_ValidationScriptsPartial" />
+}

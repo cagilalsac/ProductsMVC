@@ -22,6 +22,15 @@ namespace APP.Domain
 
 
 
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<City> Cities { get; set; }
+
+
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Db"/> class using the specified options.
         /// </summary>

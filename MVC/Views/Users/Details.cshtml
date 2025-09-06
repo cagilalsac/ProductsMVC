@@ -1,0 +1,167 @@
+﻿@model UserResponse
+
+@* Generated from Custom MVC Template. *@
+@* Model namespace using directive should be added to _ViewImports.cshtml. *@
+
+@{
+    var containerDivClass = "container"; // "container-fluid" can be used for full width
+}
+@{
+    /*
+    ViewBag and ViewData are the same collection (dictionary).
+    They carry extra data other than the model from a controller action to its view, or between views.
+    The value assigned will be shown in Views\Shared\_Layout.cshtml view's title tag of the head tag.
+    */
+    ViewData["Title"] = "User Details";
+}
+
+<div class="@containerDivClass">
+    <h1>@ViewData["Title"]</h1>
+    <hr />
+</div>
+
+@if (Model is not null)
+{
+<div class="@containerDivClass">
+    @if (TempData["Message"] is not null)
+    {
+    /*
+    TempData is used to carry extra data to the redirected controller action's view.
+    */
+    <p class="text-danger">
+        @TempData["Message"]
+    </p>
+    }
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.UserName)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.UserName)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Password)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Password)
+        </div>
+    </div>
+    @* Instead of seperate first name and last name, full name is used *@
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.FullName)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.FullName)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.GenderF)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.GenderF)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.BirthDateF)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.BirthDateF)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.RegistrationDateF)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.RegistrationDateF)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.ScoreF)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.ScoreF)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.IsActiveF)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.IsActiveF)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Address)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Address)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Group)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Group)
+        </div>
+    </div>
+    @* TODO *@
+    @* <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Country)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Country)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.City)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.City)
+        </div>
+    </div> *@
+
+
+@* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. 
+    Raw HTML Helper is used in case string parameter may have HTML tags. *@
+    
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            <b>@Html.DisplayNameFor(model => model.Roles)</b>
+        </div>
+        <div class="col-10">
+            @* Way 1: *@
+            @* @{
+                var roles = "";
+                foreach (var role in Model.Roles)
+                {
+                    roles = role + ", ";    
+                }
+                roles = roles.TrimEnd(',', ' ');
+            }
+            @roles *@
+            @* Way 2: *@
+            @string.Join(", ", Model.Roles)
+        </div>
+    </div>
+   
+
+    <hr /> 
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>@:&nbsp;|&nbsp;
+        <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>@:&nbsp;|&nbsp;
+    }
+    <a asp-action="Index">Back to List</a>
+</div>
+}

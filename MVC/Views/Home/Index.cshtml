@@ -1,4 +1,12 @@
 ﻿@{
+    @inject IConfiguration configuration
+    // This injects the IConfiguration service directly into the view making configuration settings (appsettings.json)
+    // accessible without controller dependencies. IConfiguration service may also be injected to the controllers.
+    // configuration is the local variable name that will be used in this view such as to reach the Title section
+    // of appsettings.json, configuration["Title"] will be used as below.
+}
+
+@{
     /*
     ViewData and ViewBag are the same collection (dictionary).
     They carry extra data other than the model object from a controller action to its view, or between views.
@@ -11,5 +19,13 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to Products MVC</h1>
+    <h1 class="display-4">Welcome to @configuration["Title"]</h1> 
+    @* Changed from <h1 class="display-4">Welcome to Products MVC</h1> to use Title in appsettings.json *@
 </div>
+
+@* Added to show App section's Version and Date values in appsettings.json: *@
+<p class="text-center">
+    Version: @configuration["App:Version"]
+    <br /> 
+    Date: @configuration["App:Date"]
+</p>

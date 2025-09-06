@@ -9,12 +9,12 @@ using System.Text;
 namespace CORE.APP.Services.Authentication
 {
     /// <summary>
-    /// Inherits from the base AuthService class to use getting claims of a user operation and implements ITokenAuthService interface.
+    /// Inherits from the base AuthServiceBase class to use getting claims of a user operation and implements ITokenAuthService interface.
     /// Provides concrete implementations for token-based authentication operations, including
     /// generating token response with JWT (access token) and refresh token, generating refresh token, and extracting claims from access token (JWT).
     /// This service is responsible for securely creating and validating JWT used in authentication flows.
     /// </summary>
-    public class TokenAuthService : AuthService, ITokenAuthService
+    public class TokenAuthService : AuthServiceBase, ITokenAuthService
     {
         /// <summary>
         /// Returns a token response including JWT (access token) and refresh token.

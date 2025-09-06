@@ -7,9 +7,9 @@ namespace CORE.APP.Services.Authentication.MVC
 {
     /// <summary>
     /// Provides cookie-based authentication services for signing in and signing out users.
-    /// Inherits from <see cref="AuthService"/> to utilize claim generation logic.
+    /// Inherits from <see cref="AuthServiceBase"/> to utilize claim generation logic.
     /// </summary>
-    public class CookieAuthService : AuthService, ICookieAuthService
+    public class CookieAuthService : AuthServiceBase, ICookieAuthService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 

@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using CORE.APP.Services;
 using APP.Models;
+using Microsoft.AspNetCore.Authorization;
 
 // Generated from Custom MVC Template.
 
 namespace MVC.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         // Service injections:
@@ -72,6 +74,7 @@ namespace MVC.Controllers
         }
 
         // GET: Products/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             SetViewData(); // set ViewData dictionary to carry extra data other than the model to the view
@@ -80,6 +83,7 @@ namespace MVC.Controllers
 
         // POST: Products/Create
         [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create(ProductRequest product)
         {
             if (ModelState.IsValid) // check data annotation validation errors in the request
@@ -98,6 +102,7 @@ namespace MVC.Controllers
         }
 
         // GET: Products/Edit/5
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
             // Get item to edit service logic:
@@ -108,6 +113,7 @@ namespace MVC.Controllers
 
         // POST: Products/Edit
         [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(ProductRequest product)
         {
             if (ModelState.IsValid) // check data annotation validation errors in the request
@@ -126,6 +132,7 @@ namespace MVC.Controllers
         }
 
         // GET: Products/Delete/5
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             // Get item to delete service logic:
@@ -135,6 +142,7 @@ namespace MVC.Controllers
 
         // POST: Products/Delete
         [HttpPost, ValidateAntiForgeryToken, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteConfirmed(int id)
         {
             // Delete item service logic:
