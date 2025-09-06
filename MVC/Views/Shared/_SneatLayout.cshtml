@@ -100,35 +100,35 @@
                             </li>
                         }
                     }
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bxs-user-account"></i>
-                            <div class="text-truncate">Accounts</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a asp-area="" asp-action="Index" asp-controller="Groups" class="menu-link">
-                                    <div class="text-truncate">Groups</div>
-                                </a>
-                            </li>
-                            @if (User.Identity.IsAuthenticated)
-                            {
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="menu-item">
+                            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons bx bxs-user-account"></i>
+                                <div class="text-truncate">Accounts</div>
+                            </a>
+                            <ul class="menu-sub">
                                 <li class="menu-item">
                                     <a asp-area="" asp-action="Index" asp-controller="Users" class="menu-link">
                                         <div class="text-truncate">Users</div>
                                     </a>
                                 </li>
-                                if (User.IsInRole("Admin"))
-                                {
+                                <li class="menu-item">
+                                    <a asp-area="" asp-action="Index" asp-controller="Groups" class="menu-link">
+                                        <div class="text-truncate">Groups</div>
+                                    </a>
+                                </li>
+                                @if (User.IsInRole("Admin"))
+                                 {
                                     <li class="menu-item">
                                         <a asp-area="" asp-action="Index" asp-controller="Roles" class="menu-link">
                                             <div class="text-truncate">Roles</div>
                                         </a>
                                     </li>
                                 }
-                            }
-                        </ul>
-                    </li>
+                            </ul>
+                        </li>
+                    }
                 </ul>
             </aside>
             <!-- / Menu -->

@@ -1,9 +1,8 @@
 ﻿#nullable disable
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using CORE.APP.Services;
 using APP.Models;
+using CORE.APP.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 // Generated from Custom MVC Template.
 
@@ -58,8 +57,8 @@ namespace MVC.Controllers
         }
 
         // GET: Groups
-        [AllowAnonymous] // Both authenticated and unauthenticated users (everyone) can execute this action.
-                         // Overrides the Authorize defined for the controller.
+        //[AllowAnonymous] // Can be used to allow authenticated and unauthenticated users (everyone) to execute this action.
+                           // Overrides the Authorize defined for the controller.
         public IActionResult Index()
         {
             // Get collection service logic:

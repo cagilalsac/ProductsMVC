@@ -680,23 +680,24 @@ https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.c
       [AllowAnonymous]: Can be used to override [Authorize] at the action level and allows public access, therefore gives permission to everyone 
       for executing specific actions.
 
-65. Add the [Authorize] attribute on top of the GroupsController class then add [AllowAnonymous] attribute on top of the Index action 
-    so that all of the actions except the Index action can be executed by only authenticated users, Index action can be executed by everyone. 
-    Then add [Authorize(Roles = "Admin")] attribute on top of the Create, Edit and Delete get and post actions so that only authenticated users 
-    with role Admin can execute these actions:  
+65. Add the [Authorize] attribute on top of the GroupsController class. For example, if the Index action is wanted to be executed by 
+    authorized and unauthorized users (eveyone), [AllowAnonymous] attribute can be defined. The Details action can be executed by only 
+    authenticated users since Authorize is defined at controller level. Add [Authorize(Roles = "Admin")] attribute on top of the 
+    Create, Edit and Delete get and post actions so that only authenticated users with role Admin can execute these actions:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/GroupsController.cs
 
-66. Add the [Authorize(Roles = "Admin,User")] attribute on top of the Index action of the UsersController class so that 
-    authenticated users with role Admin or User can execute the Index action. Then add [Authorize(Roles = "Admin")] attribute on top of 
-    the Details, Create, Edit and Delete get and post actions so that authenticated users with role Admin can execute these actions. 
-    The Login, Logout and Register actions can be executed by everyone since no Authorize attribute is defined. However, if Authorize 
-    attribute was defined at the controller level, we should have used AllowAnonymous attribute for Login, Logout and Register actions:  
+66. Add the [Authorize(Roles = "Admin,User")] attribute, or [Authorize] attribute since we have only 2 roles, on top of the Index action 
+    of the UsersController class so that authenticated users with all roles can execute the Index action. Then add 
+    [Authorize(Roles = "Admin")] attribute on top of the Details, Create, Edit and Delete get and post actions so that 
+    authenticated users with role Admin can execute these actions. The Login, Logout and Register actions can be executed by everyone 
+    since no Authorize attribute is defined. However, if Authorize attribute was defined at the controller level, we should have used 
+    AllowAnonymous for Login, Logout and Register actions:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/UsersController.cs
 
 67. We shouldn't show the links directing to unauthorized controller actions in the views. Therefore, we need to add if the user is in
     Admin role in the layout view for the Roles link. We also need to check if the user is in Admin or User role 
-    (checking if user is authenticated since we have only 2 roles) for the Users link. We can show the user name and Logout link if 
-    the user is authenticated, Register and Login links if the user is not authenticated:  
+    (checking if user is authenticated is better since we have only 2 roles) for the Groups and Users links. We can show the user name and 
+    Logout link if the user is authenticated, Register and Login links if the user is not authenticated:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.cshtml
 
 68. We also should check if the user is authenticated in the Index view of the Groups since only authenticated users can execute the 
