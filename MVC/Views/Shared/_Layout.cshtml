@@ -92,6 +92,10 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
                                 </li>
                             }
+                            @* Only authenticated users can see the Cart link: *@
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Carts" asp-action="Index">Cart</a>
+                            </li>
                         }
                         
                         @* Only authenticated users can see the Users and Groups links: *@

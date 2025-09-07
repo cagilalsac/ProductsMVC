@@ -77,7 +77,7 @@ namespace MVC.Controllers
         // Way 1:
         //[Authorize(Roles = "Admin,User")] // Only authenticated users with role Admin or User can execute this action.
         // Way 2: since we have only 2 roles Admin and User, we can use Authorize to check auhenticated users without defining roles.
-        [Authorize]
+        [Authorize] // Only authenticated users can execute this action.
         public IActionResult Index()
         {
             // Get collection service logic:

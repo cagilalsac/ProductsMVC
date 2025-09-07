@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MVC.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")] // Only authenticated users with role Admin can execute the actions of the controller.
     public class CategoriesController : Controller
     {
         // Service injections:

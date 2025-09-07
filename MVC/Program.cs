@@ -1,8 +1,10 @@
 using APP.Domain;
 using APP.Models;
 using APP.Services;
+using APP.Services.Carts;
 using CORE.APP.Services;
 using CORE.APP.Services.Authentication.MVC;
+using CORE.APP.Services.Session.MVC;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -52,8 +54,36 @@ builder.Services.AddHttpContextAccessor();
 // Register CookieAuthService as a scoped dependency for ICookieAuthService.
 // Scoped lifetime ensures a new instance per HTTP request, which is required for services accessing HttpContext.
 // CookieAuthService handles user authentication using cookies, supporting login and logout operations.
-// This service registration enables constructor injection of ICookieAuthService to the controllers throughout the application.
+// This service registration enables constructor injection of ICookieAuthService to the controllers or services throughout the application.
 builder.Services.AddScoped<ICookieAuthService, CookieAuthService>();
+
+
+
+// -------
+// Session
+// -------
+// Register session services and configure session options.
+// Sets the session idle timeout to 30 minutes (default 20 minutes); if no activity occurs within this period, the session expires.
+// Enables storing user-specific data (e.g., shopping cart) across multiple requests during the session lifetime.
+// Required for features that rely on session state, such as CartService and SessionService.
+builder.Services.AddSession(config =>
+{
+    config.IdleTimeout = TimeSpan.FromMinutes(30);
+});
+
+
+
+// Register SessionService as a scoped dependency for SessionServiceBase.
+// Scoped lifetime ensures a new instance per HTTP request, which is required for services accessing HttpContext.
+// SessionService handles session management.
+// This service registration enables constructor injection of SessionServiceBase to the controllers or services throughout the application.
+builder.Services.AddScoped<SessionServiceBase, SessionService>();
+
+// Register CartService as a scoped dependency for ICartService.
+// Scoped lifetime ensures a new instance per HTTP request.
+// CartService handles shopping cart management.
+// This service registration enables constructor injection of ICartService to the controllers or services throughout the application.
+builder.Services.AddScoped<ICartService, CartService>();
 
 /* 
  SOLID Principles:
@@ -177,6 +207,16 @@ app.UseAuthentication();
 
 // Enable authorization middleware.
 app.UseAuthorization();
+
+
+
+// -------
+// Session
+// -------
+// Enable session middleware in the HTTP request pipeline.
+app.UseSession();
+
+
 
 // Configure the default route for controllers for sending requests to controllers' actions as controller/action/id where id is optional.
 app.MapControllerRoute(

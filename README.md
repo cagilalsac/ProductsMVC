@@ -1,8 +1,8 @@
 # Project Development Roadmap
 
-Note: The development of User and Location Management Modules will not be explained. You need to develop them as homework while learning from 
-      the Products Module.  
-      You also need to develop your own MVC Project including User Management Module for a different domain such as Movies, Books, etc. 
+Note: The development of Users and Locations Modules will not be explained. You need to develop Users Module as homework 
+      while learning from the Products Module. Locations Module is optional.  
+      You also need to develop your own MVC Project including Users Module for a different domain such as Movies, Books, etc.  
       Users and optional Locations diagrams with some project example diagrams can be found at:  
       https://need4code.com/DotNet?path=.NET%5C00_Files%5CProjects%5CDiagrams.jpg
 
@@ -560,12 +560,16 @@ Note: The entities and DbContext class should be implemented first. Second, requ
 ## 8. User, Role, Group, Country and City Entities - APP Project: Source code shared in APP and MVC Projects.
 
 Note: Homework includes:  
+
 APP Domain: User, UserRole, Role, Group, Country and City entities with Genders enum  
             Users, UserRoles, Roles, Groups, Countries and Cities DbSets in the Db class  
+
 APP Models: UserRequest, UserResponse, RoleRequest, RoleResponse, GroupRequest and GroupResponse classes  
             CountryRequest, CountryResponse, CityRequest and CityResponse classes are optional, you don't need to do as homework  
+
 APP Services: UserService, RoleService and GroupService classes  
               CountryService and CityService classes are optional, you don't need to do as homework  
+
 MVC Controllers: UsersController, RolesController and GroupsController classes with views  
                  CountriesController and CitiesController classes with views are optional, you don't need to do as homework
 
@@ -727,11 +731,54 @@ https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.c
 
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.cshtml  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Products/Index.cshtml  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Stores/Index.cshtml  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Categories/Index.cshtml
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Stores/Index.cshtml
 
 71. Optionally you can use the Sneat Web Template for your web application to look better:  
     https://need4code.com/DotNet/Home/Index?path=.NET%5C00_Files%5CWeb%20Templates%5CSneat.7z  
     Extract the folders in the compressed file to your MVC Project.  
     Then modify the _SneatLayout.cshtml according to your project.  
     Finally, change the Layout assignment in the _ViewStart.cshtml to _SneatLayout for your views to use.
+
+## 10. Session - CORE Project
+
+72. Create SessionServiceBase and SessionService classes in CORE Project's APP/Services/Session/MVC folder:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/CORE/APP/Services/Session/MVC/SessionServiceBase.cs  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/CORE/APP/Services/Session/MVC/SessionService.cs
+
+## 10. Session - APP Project
+
+73. Create CartItem model in APP/Models/Carts folder:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/Carts/CartItem.cs
+
+74. Create CartItemGroupedBy model in APP/Models/Carts folder:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/Carts/CartItemGroupedBy.cs
+
+75. Create ICartService interface in APP/Services/Carts folder:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Services/Carts/ICartService.cs
+
+76. Create CartService class in APP/Services/Carts folder:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Services/Carts/CartService.cs
+
+## 10. Session - MVC Project
+
+77. Add  
+    builder.Services.AddSession...  
+    builder.Services.AddScoped... for types SessionServiceBase and SessionService  
+    builder.Services.AddScoped... for types ICartService and CartService  
+    app.UseSession...  
+    in Program.cs:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Program.cs
+
+78. Create CartsController in the Controllers/Carts folder:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/Carts/CartsController.cs
+
+79. Create Index view in the Views/Carts folder:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Carts/Index.cshtml
+
+80. Add Cart link in the nav bar of the layout view:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.cshtml  
+    or  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_SneatLayout.cshtml
+
+81. In Views/Products/Index.cshtml view, create the link for adding the product to the cart:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Products/Index.cshtml

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MVC.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")] // Only authenticated users with role Admin can execute the actions of the controller.
     public class StoresController : Controller
     {
         // Service injections:
@@ -54,7 +54,8 @@ namespace MVC.Controllers
         }
 
         // GET: Stores
-        [AllowAnonymous]
+        [AllowAnonymous] // Authenticated and unauthenticated users (everyone) can execute this action.
+                         // Overrides the Authorize defined for the controller.
         public IActionResult Index()
         {
             // Get collection service logic:

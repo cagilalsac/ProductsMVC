@@ -1,0 +1,68 @@
+﻿@model IEnumerable<APP.Models.Carts.CartItemGroupedBy>
+
+@{
+    ViewBag.Title = "Cart";
+}
+
+<h1>@ViewBag.Title</h1>
+<hr />
+@if (TempData["Message"] is not null)
+{
+    <p class="bg-warning text-dark">
+        @TempData["Message"]
+    </p>
+}
+@if (Model.Any())
+{
+    <table class="table">
+        <tr>
+            <td colspan="4">
+                <a asp-action="Clear">Clear Cart</a>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPriceF)
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalPriceF)
+                </td>
+                <td>
+                    <a asp-action="Remove" asp-route-productId="@item.ProductId">Remove from Cart</a>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td>
+                <b>Total</b>
+            </td>
+            <td>
+                <b>@Model.Sum(model => model.ProductCount)</b>
+            </td>
+            <td colspan="2">
+                <b>@Model.Sum(model => model.TotalPrice).ToString("C2")</b>
+            </td>
+        </tr>
+    </table>
+}
+else
+{
+    <p class="bg-success text-white">Cart is empty.</p>
+}

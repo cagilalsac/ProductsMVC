@@ -85,6 +85,8 @@
 					        <td class="text-end w-25">
                             @if (User.Identity.IsAuthenticated)
                             {
+                                <a asp-action="Add" asp-controller="Carts" asp-route-productId="@item.Id">Add to Cart</a>
+                                @:&nbsp;|&nbsp;
                                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                                 @if (User.IsInRole("Admin"))
                                 {
