@@ -1,7 +1,6 @@
 using APP.Domain;
 using APP.Models;
 using APP.Services;
-using APP.Services.Carts;
 using CORE.APP.Services;
 using CORE.APP.Services.Authentication.MVC;
 using CORE.APP.Services.Session.MVC;
@@ -84,6 +83,10 @@ builder.Services.AddScoped<SessionServiceBase, SessionService>();
 // CartService handles shopping cart management.
 // This service registration enables constructor injection of ICartService to the controllers or services throughout the application.
 builder.Services.AddScoped<ICartService, CartService>();
+
+// Locations:
+builder.Services.AddScoped<IService<CountryRequest, CountryResponse>, CountryService>();
+builder.Services.AddScoped<IService<CityRequest, CityResponse>, CityService>();
 
 /* 
  SOLID Principles:

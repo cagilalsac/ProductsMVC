@@ -83,7 +83,7 @@ namespace APP.Services
 
         /// <summary>
         /// Creates a new category in the database using the provided <see cref="CategoryRequest"/> model (DTO).
-        /// Validates that no existing category has the same title (case-insensitive, trimmed).
+        /// Validates that no existing category has the same title (case-sensitive, trimmed).
         /// If a duplicate title exists, returns an error <see cref="CommandResponse"/>.
         /// Otherwise, adds the new category, saves changes, and returns a success <see cref="CommandResponse"/> containing the created category's ID.
         /// </summary>
@@ -94,13 +94,13 @@ namespace APP.Services
         /// </returns>
         public CommandResponse Create(CategoryRequest request)
         {
-            // Check if any category already exists with the same title (case-insensitive, trimmed) preventing duplicate category titles in the database.
+            // Check if any category already exists with the same title (case-sensitive, trimmed) preventing duplicate category titles in the database.
             // Way 1:
-            //var existingEntity = _db.Categories.SingleOrDefault(categoryEntity => categoryEntity.Title.ToUpper() == request.Title.ToUpper().Trim());
+            //var existingEntity = _db.Categories.SingleOrDefault(categoryEntity => categoryEntity.Title == request.Title.Trim());
             //if (existingEntity is not null) // if (existingEntity != null) can alo be written
             //    return Error("Category with the same title exists!");
             // Way 2:
-            if (_db.Categories.Any(categoryEntity => categoryEntity.Title.ToUpper() == request.Title.ToUpper().Trim()))
+            if (_db.Categories.Any(categoryEntity => categoryEntity.Title == request.Title.Trim()))
                 return Error("Category with the same title exists!");
 
             // Creates a new Category entity with the provided title (trimmed for consistency).
@@ -170,7 +170,7 @@ namespace APP.Services
 
         /// <summary>
         /// Updates an existing category in the database using the provided <see cref="CategoryRequest"/> model (DTO).
-        /// Validates that no existing category has the same title other than the current updated category (case-insensitive, trimmed).
+        /// Validates that no existing category has the same title other than the current updated category (case-sensitive, trimmed).
         /// If a duplicate title exists, returns an error <see cref="CommandResponse"/>.
         /// Otherwise, updates the category, saves changes, and returns a success <see cref="CommandResponse"/> containing the updated category's ID.
         /// </summary>
@@ -181,9 +181,8 @@ namespace APP.Services
         /// </returns>
         public CommandResponse Update(CategoryRequest request)
         {
-            // If any other category (excluding the current one) already has the same title (case-insensitive, trimmed), don't update.
-            // ToLower string method can also be used instead of ToUpper.
-            if (_db.Categories.Any(categoryEntity => categoryEntity.Id != request.Id && categoryEntity.Title.ToUpper() == request.Title.ToUpper().Trim()))
+            // If any other category (excluding the current one) already has the same title (case-sensitive, trimmed), don't update.
+            if (_db.Categories.Any(categoryEntity => categoryEntity.Id != request.Id && categoryEntity.Title == request.Title.Trim()))
                 return Error("Category with the same title exists!");
 
             // Attempt to find the Category entity by its ID, if not found return error command response with message.

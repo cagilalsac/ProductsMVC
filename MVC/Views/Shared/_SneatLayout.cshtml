@@ -128,6 +128,27 @@
                                 }
                             </ul>
                         </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="menu-item">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                    <i class="menu-icon tf-icons bx bxs-map"></i>
+                                    <div class="text-truncate">Locations</div>
+                                </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item">
+                                        <a asp-area="" asp-action="Index" asp-controller="Countries" class="menu-link">
+                                            <div class="text-truncate">Countries</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a asp-area="" asp-action="Index" asp-controller="Cities" class="menu-link">
+                                            <div class="text-truncate">Cities</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
                     }
                 </ul>
             </aside>

@@ -1,9 +1,8 @@
 ﻿using APP.Models;
-using APP.Models.Carts;
 using CORE.APP.Services;
 using CORE.APP.Services.Session.MVC;
 
-namespace APP.Services.Carts
+namespace APP.Services
 {
     /// <summary>
     /// Provides operations for managing a user's shopping cart.

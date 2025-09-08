@@ -11,16 +11,16 @@ namespace APP.Models
 
         public string Name { get; set; }
 
-        [DisplayName("Unit Price")]
+        [DisplayName("Price")]
         public decimal? UnitPriceStart { get; set; }
 
         public decimal? UnitPriceEnd { get; set; }
 
-        [DisplayName("Stock Amount")]
+        [DisplayName("Stock")]
         public int? StockAmountStart { get; set; }
         public int? StockAmountEnd { get; set; }
 
-        [DisplayName("Expiration Date")]
+        [DisplayName("Expiration")]
         public DateTime? ExpirationDateStart { get; set; }
         public DateTime? ExpirationDateEnd { get; set; }
 

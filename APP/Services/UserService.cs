@@ -41,7 +41,7 @@ namespace APP.Services
 
         public CommandResponse Create(UserRequest request)
         {
-            if (Query().Any(u => u.UserName.ToUpper() == request.UserName.ToUpper().Trim() && u.IsActive == request.IsActive))
+            if (Query().Any(u => u.UserName == request.UserName.Trim() && u.IsActive == request.IsActive))
                 return Error("Active user with the same user name exists!");
             var entity = new User
             {
@@ -66,7 +66,7 @@ namespace APP.Services
 
         public CommandResponse Delete(int id)
         {
-            var entity = Query().SingleOrDefault(u => u.Id == id);
+            var entity = Query(false).SingleOrDefault(u => u.Id == id); // isNoTracking is false for being tracked by EF Core to delete the entity
             if (entity is null)
                 return Error("User not found!");
             Delete(entity.UserRoles);
@@ -171,9 +171,9 @@ namespace APP.Services
 
         public CommandResponse Update(UserRequest request)
         {
-            if (Query().Any(u => u.Id != request.Id && u.UserName.ToUpper() == request.UserName.ToUpper().Trim() && u.IsActive == request.IsActive))
+            if (Query().Any(u => u.Id != request.Id && u.UserName == request.UserName.Trim() && u.IsActive == request.IsActive))
                 return Error("Active user with the same user name exists!");
-            var entity = Query().SingleOrDefault(u => u.Id == request.Id);
+            var entity = Query(false).SingleOrDefault(u => u.Id == request.Id); // isNoTracking is false for being tracked by EF Core to update the entity
             if (entity is null)
                 return Error("User not found!");
             Delete(entity.UserRoles);

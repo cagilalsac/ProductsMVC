@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace APP.Models.Carts
+namespace APP.Models
 {
     /// <summary>
     /// Represents an item in a user's shopping cart.

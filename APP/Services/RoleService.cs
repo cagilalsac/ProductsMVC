@@ -19,7 +19,7 @@ namespace APP.Services
 
         public CommandResponse Create(RoleRequest request)
         {
-            if (Query().Any(r => r.Name.ToUpper() == request.Name.ToUpper().Trim()))
+            if (Query().Any(r => r.Name == request.Name.Trim()))
                 return Error("Role with the same name exists!");
             var entity = new Role
             {
@@ -31,7 +31,7 @@ namespace APP.Services
 
         public CommandResponse Delete(int id)
         {
-            var entity = Query().SingleOrDefault(r => r.Id == id);
+            var entity = Query(false).SingleOrDefault(r => r.Id == id); // isNoTracking is false for being tracked by EF Core to delete the entity
             if (entity is null)
                 return Error("Role not found!");
             Delete(entity.UserRoles);
@@ -80,9 +80,9 @@ namespace APP.Services
 
         public CommandResponse Update(RoleRequest request)
         {
-            if (Query().Any(r => r.Id != request.Id && r.Name.ToUpper() == request.Name.ToUpper().Trim()))
+            if (Query().Any(r => r.Id != request.Id && r.Name == request.Name.Trim()))
                 return Error("Role with the same name exists!");
-            var entity = Query().SingleOrDefault(r => r.Id == request.Id);
+            var entity = Query(false).SingleOrDefault(r => r.Id == request.Id); // isNoTracking is false for being tracked by EF Core to update the entity
             if (entity is null)
                 return Error("Role not found!");
             entity.Name = request.Name?.Trim();

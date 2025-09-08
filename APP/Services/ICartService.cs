@@ -1,6 +1,6 @@
-﻿using APP.Models.Carts;
+﻿using APP.Models;
 
-namespace APP.Services.Carts
+namespace APP.Services
 {
     /// <summary>
     /// Defines operations for managing a user's shopping cart.

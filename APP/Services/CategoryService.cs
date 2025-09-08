@@ -19,7 +19,7 @@ namespace APP.Services
 
         public CommandResponse Create(CategoryRequest request)
         {
-            if (Query().Any(c => c.Title.ToUpper() == request.Title.ToUpper().Trim()))
+            if (Query().Any(c => c.Title == request.Title.Trim()))
                 return Error("Category with the same title exists!");
             var entity = new Category
             {
@@ -32,7 +32,7 @@ namespace APP.Services
 
         public CommandResponse Delete(int id)
         {
-            var entity = Query().SingleOrDefault(c => c.Id == id);
+            var entity = Query(false).SingleOrDefault(c => c.Id == id); // isNoTracking is false for being tracked by EF Core to delete the entity
             if (entity is null)
                 return Error("Category not found!");
 
@@ -85,9 +85,9 @@ namespace APP.Services
 
         public CommandResponse Update(CategoryRequest request)
         {
-            if (Query().Any(c => c.Id != request.Id && c.Title.ToUpper() == request.Title.ToUpper().Trim()))
+            if (Query().Any(c => c.Id != request.Id && c.Title == request.Title.Trim()))
                 return Error("Category with the same title exists!");
-            var entity = Query().SingleOrDefault(c => c.Id == request.Id);
+            var entity = Query(false).SingleOrDefault(c => c.Id == request.Id); // isNoTracking is false for being tracked by EF Core to update the entity
             if (entity is null)
                 return Error("Category not found!");
             entity.Title = request.Title?.Trim();

@@ -19,7 +19,7 @@ namespace APP.Services
 
         public CommandResponse Create(GroupRequest request)
         {
-            if (Query().Any(g => g.Title.ToUpper() == request.Title.ToUpper().Trim()))
+            if (Query().Any(g => g.Title == request.Title.Trim()))
                 return Error("Group with the same title exists!");
             var entity = new Group
             {
@@ -31,7 +31,7 @@ namespace APP.Services
 
         public CommandResponse Delete(int id)
         {
-            var entity = Query().SingleOrDefault(g => g.Id == id);
+            var entity = Query(false).SingleOrDefault(g => g.Id == id); // isNoTracking is false for being tracked by EF Core to delete the entity
             if (entity is null)
                 return Error("Group not found!");
             if (entity.Users.Any())
@@ -77,9 +77,9 @@ namespace APP.Services
 
         public CommandResponse Update(GroupRequest request)
         {
-            if (Query().Any(g => g.Id != request.Id && g.Title.ToUpper() == request.Title.ToUpper().Trim()))
+            if (Query().Any(g => g.Id != request.Id && g.Title == request.Title.Trim()))
                 return Error("Group with the same title exists!");
-            var entity = Query().SingleOrDefault(g => g.Id == request.Id);
+            var entity = Query(false).SingleOrDefault(g => g.Id == request.Id); // isNoTracking is false for being tracked by EF Core to update the entity
             if (entity is null)
                 return Error("Group not found!");
             entity.Title = request.Title?.Trim();

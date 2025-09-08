@@ -30,7 +30,7 @@ namespace APP.Services
         public CommandResponse Create(StoreRequest request)
         {
             // s: Store entity delegate. Check if a virtual or physical store with the same name exists.
-            if (Query().Any(s => s.Name.ToUpper() == request.Name.ToUpper().Trim() && s.IsVirtual == request.IsVirtual))
+            if (Query().Any(s => s.Name == request.Name.Trim() && s.IsVirtual == request.IsVirtual))
             {
                 // Way 1:
                 //return Error((request.IsVirtual ? "Virtual" : "Physical") + " store with the same name exists!");
@@ -53,7 +53,7 @@ namespace APP.Services
         public CommandResponse Delete(int id)
         {
             // s: Store entity delegate. Get the Store entity by ID from the Stores table
-            var entity = Query().SingleOrDefault(s => s.Id == id);
+            var entity = Query(false).SingleOrDefault(s => s.Id == id); // isNoTracking is false for being tracked by EF Core to delete the entity
             if (entity is null)
                 return Error("Store not found!");
 
@@ -127,11 +127,11 @@ namespace APP.Services
         public CommandResponse Update(StoreRequest request)
         {
             // s: Store entity delegate. Check if a physical or virtual store excluding the current updated store with the same name exists.
-            if (Query().Any(s => s.Id != request.Id && s.Name.ToUpper() == request.Name.ToUpper().Trim() && s.IsVirtual == request.IsVirtual))
+            if (Query().Any(s => s.Id != request.Id && s.Name == request.Name.Trim() && s.IsVirtual == request.IsVirtual))
                 return Error($"{(request.IsVirtual ? "Virtual" : "Physical")} store with the same name exists!");
 
             // get the Store entity by ID from the Stores table
-            var entity = Query().SingleOrDefault(s => s.Id == request.Id);
+            var entity = Query(false).SingleOrDefault(s => s.Id == request.Id); // isNoTracking is false for being tracked by EF Core to update the entity
             if (entity is null)
                 return Error("Store not found!");
 

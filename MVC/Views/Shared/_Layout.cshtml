@@ -111,11 +111,18 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Groups" asp-action="Index">Groups</a>
                             </li>
 
-                            @* Only users in Admin role can see the Roles link: *@
+                            @* Only users in Admin role can see the Roles, Countries and Cities links: *@
                             if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Countries" asp-action="Index">Countries</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Cities" asp-action="Index">Cities</a>
                                 </li>
                             }
                         }

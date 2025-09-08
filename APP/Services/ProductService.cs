@@ -128,8 +128,8 @@ namespace APP.Services
         public CommandResponse Create(ProductRequest request)
         {
             // p: Product entity delegate. Check if a product with the same name exists
-            // (case-insensitive, request.Name without white space characters in the beginning and at the end).
-            if (Query().Any(p => p.Name.ToUpper() == request.Name.ToUpper().Trim()))
+            // (case-sensitive, request.Name without white space characters in the beginning and at the end).
+            if (Query().Any(p => p.Name == request.Name.Trim()))
                 return Error("Product with the same name exists!");
 
             var entity = new Product
@@ -152,12 +152,12 @@ namespace APP.Services
         public CommandResponse Update(ProductRequest request)
         {
             // p: Product entity delegate. Check if a product excluding the current updated product with the same name exists
-            // (case-insensitive, request.Name without white space characters in the beginning and at the end).
-            if (Query().Any(p => p.Id != request.Id && p.Name.ToUpper() == request.Name.ToUpper().Trim()))
+            // (case-sensitive, request.Name without white space characters in the beginning and at the end).
+            if (Query().Any(p => p.Id != request.Id && p.Name == request.Name.Trim()))
                 return Error("Product with the same name exists!");
 
             // get the Product entity by ID from the Products table
-            var entity = Query().SingleOrDefault(p => p.Id == request.Id);
+            var entity = Query(false).SingleOrDefault(p => p.Id == request.Id); // isNoTracking is false for being tracked by EF Core to update the entity
             if (entity is null)
                 return Error("Product not found!");
 
@@ -181,7 +181,7 @@ namespace APP.Services
         public CommandResponse Delete(int id)
         {
             // get the Product entity by ID from the Products table
-            var entity = Query().SingleOrDefault(p => p.Id == id);
+            var entity = Query(false).SingleOrDefault(p => p.Id == id); // isNoTracking is false for being tracked by EF Core to delete the entity
             if (entity is null)
                 return Error("Product not found!");
 
@@ -211,8 +211,8 @@ namespace APP.Services
                 // Way 2:
                 //query = query.Where(p => p.Name == request.Name);
                 // Way 3: apply name filtering to the query for partial match
-                // (case-insensitive, without white space characters in the beginning and at the end)
-                query = query.Where(p => p.Name.ToUpper().Contains(request.Name.ToUpper().Trim()));
+                // (case-sensitive, without white space characters in the beginning and at the end)
+                query = query.Where(p => p.Name.Contains(request.Name.Trim()));
 
             // if UnitPriceStart has a value
             if (request.UnitPriceStart.HasValue)

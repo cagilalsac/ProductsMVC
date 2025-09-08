@@ -747,17 +747,17 @@ https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.c
 
 ## 10. Session - APP Project
 
-73. Create CartItem model in APP/Models/Carts folder:  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/Carts/CartItem.cs
+73. Create CartItem model in APP/Models folder:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/CartItem.cs
 
-74. Create CartItemGroupedBy model in APP/Models/Carts folder:  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/Carts/CartItemGroupedBy.cs
+74. Create CartItemGroupedBy model in APP/Models folder:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/CartItemGroupedBy.cs
 
-75. Create ICartService interface in APP/Services/Carts folder:  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Services/Carts/ICartService.cs
+75. Create ICartService interface in APP/Services folder:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Services/ICartService.cs
 
-76. Create CartService class in APP/Services/Carts folder:  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Services/Carts/CartService.cs
+76. Create CartService class in APP/Services folder:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Services/CartService.cs
 
 ## 10. Session - MVC Project
 
@@ -769,8 +769,8 @@ https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.c
     in Program.cs:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Program.cs
 
-78. Create CartsController in the Controllers/Carts folder:  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/Carts/CartsController.cs
+78. Create CartsController in the Controllers folder:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/CartsController.cs
 
 79. Create Index view in the Views/Carts folder:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Carts/Index.cshtml
@@ -807,5 +807,36 @@ https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.c
 86. Create List view in the Views/Products folder:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Products/List.cshtml
 
+    Note: If there are too many records to list and paging will not be implemented, table HTML tag 
+    can be put in a div tag such as:  
+    ```
+    <div style="height:430px;overflow-y:auto;">
+    ```  
+    to add a vertical scroll bar. Height value can be adjusted according to the page design.
+
 87. Add Search link directing to the List action of the Products controller in the Products Index view:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Products/Index.cshtml
+
+## 12. Extra Country and City Entities (Locations): Source code shared in APP and MVC Projects.
+
+88. APP Domain: Country and City entities, add Countries and Cities DbSets in the Db database context  
+ 
+    APP Models: CountryRequest, CountryResponse, CityRequest and CityResponse models  
+
+    APP Services: CountryService and CityService services  
+ 
+    MVC IoC Container in Program.cs: builder.AddScoped... for CountryService and builder.AddScoped... for CityService  
+
+    MVC Controllers: CountriesController and CitiesController controllers with views  
+ 
+    MVC Layout: Countries and Cities links  
+
+    Notes:  
+    List method with default countryId parameter is added at the bottom of the CityService.  
+ 
+    Allowed anonymous Json action, which returns cities JSON, with default countryId parameter is added at the bottom 
+    of the CitiesController.  
+ 
+    All controllers are authorized for Admin role.  
+
+    

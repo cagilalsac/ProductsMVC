@@ -1,8 +1,8 @@
-﻿using APP.Services.Carts;
+﻿using APP.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MVC.Controllers.Carts
+namespace MVC.Controllers
 {
     /// <summary>
     /// Controller for managing shopping cart operations for authenticated users.

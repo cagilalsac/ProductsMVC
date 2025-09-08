@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace APP.Models.Carts
+namespace APP.Models
 {
     /// <summary>
     /// Represents a grouped summary of cart items for a user and product.
