@@ -1,9 +1,10 @@
 ﻿#nullable disable
+using APP.Models;
+using APP.Services;
+using CORE.APP.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using CORE.APP.Services;
-using APP.Models;
-using Microsoft.AspNetCore.Authorization;
 
 // Generated from Custom MVC Template.
 
@@ -155,6 +156,56 @@ namespace MVC.Controllers
             var response = _productService.Delete(id);
             SetTempData(response.Message); // set TempData dictionary to carry the message to the redirected action's view
             return RedirectToAction(nameof(Index)); // redirect to the Index action
+        }
+
+
+
+        // Filtering:
+        // GET: Products/List
+        public IActionResult List()
+        {
+            // get all products
+            var list = _productService.List();
+
+            // get categories for the categories drop down list (select HTML tag without multiple attribute)
+            var categorySelectList = new SelectList(_categoryService.List(), "Id", "Title");
+
+            // get stores for the stores list box (select HTML tag with multiple attribute)
+            var storeMultiSelectList = new MultiSelectList(_StoreService.List(), "Id", "Name");
+
+            // create the view model to be sent to the view
+            var viewModel = new ProductsIndexViewModel
+            {
+                List = list,
+                Filter = new ProductQueryRequest(), // filter object with no filter criteria
+                CategorySelectList = categorySelectList,
+                StoreMultiSelectList = storeMultiSelectList
+            };
+
+            // send the view model to the view as the model
+            return View(viewModel);
+        }
+
+        // POST: Products/List
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult List(ProductsIndexViewModel viewModel)
+        {
+            // cast to the concrete service type to access the overloaded List method with filter query request parameter
+            var list = (_productService as ProductService).List(viewModel.Filter); // get filtered products by the view model's filter request
+
+            // get categories for the categories drop down list as request's CategoryId value selected (select HTML tag without multiple attribute)
+            var categorySelectList = new SelectList(_categoryService.List(), "Id", "Title", viewModel.Filter.CategoryId);
+
+            // get stores for the stores list box as request's StoreIds values selected (select HTML tag with multiple attribute)
+            var storeMultiSelectList = new MultiSelectList(_StoreService.List(), "Id", "Name", viewModel.Filter.StoreIds);
+
+            // update the view model to be sent to the view, no need to update the Filter property because it is received from the view with data
+            viewModel.List = list;
+            viewModel.CategorySelectList = categorySelectList;
+            viewModel.StoreMultiSelectList = storeMultiSelectList;
+
+            // send the view model to the view as the model
+            return View(viewModel);
         }
 	}
 }

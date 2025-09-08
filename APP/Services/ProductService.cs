@@ -193,5 +193,93 @@ namespace APP.Services
 
             return Success("Product deleted successfully.", entity.Id);
         }
+
+
+
+        // get a filtered list of Product response items filtered by the Product query request properties
+        public List<ProductResponse> List(ProductQueryRequest request) 
+        {
+            // get the query of all Product entities
+            var query = Query();
+
+            // apply filtering according to the request properties if they have values, p: Product entity delegate
+            // if Name != null and Name.Trim() != ""
+            if (!string.IsNullOrWhiteSpace(request.Name))
+                // apply name filtering to the query for exact match
+                // Way 1:
+                //query = query.Where(u => p.Name.Equals(request.Name));
+                // Way 2:
+                //query = query.Where(p => p.Name == request.Name);
+                // Way 3: apply name filtering to the query for partial match
+                // (case-insensitive, without white space characters in the beginning and at the end)
+                query = query.Where(p => p.Name.ToUpper().Contains(request.Name.ToUpper().Trim()));
+
+            // if UnitPriceStart has a value
+            if (request.UnitPriceStart.HasValue)
+                // apply unit price start filtering to the query for greater than or equal match
+                query = query.Where(p => p.UnitPrice >= request.UnitPriceStart.Value);
+
+            // if UnitPriceEnd has a value
+            if (request.UnitPriceEnd.HasValue)
+                // apply unit price end filtering to the query for less than or equal match
+                query = query.Where(p => p.UnitPrice <= request.UnitPriceEnd.Value);
+
+            // if StockAmountStart has a value
+            if (request.StockAmountStart.HasValue)
+                // apply stock amount start filtering to the query for greater than or equal match
+                query = query.Where(p => (p.StockAmount ?? 0) >= request.StockAmountStart.Value);
+                // if p.StockAmount is null use 0 otherwise use p.StockAmount value
+
+            // if StockAmountEnd has a value
+            if (request.StockAmountEnd.HasValue)
+                // apply stock amount end filtering to the query for less than or equal match
+                query = query.Where(p => (p.StockAmount ?? 0) <= request.StockAmountEnd.Value);
+
+            // if ExpirationDateStart has a value
+            if (request.ExpirationDateStart.HasValue)
+                // apply expiration date start filtering to the query for greater than or equal match
+                // Way 1: filtering with date and time value (e.g. 08/22/1990 13:45:57)
+                //query = query.Where(u => u.ExpirationDateStart.HasValue && u.ExpirationDateStart.Value >= request.ExpirationDateStart.Value);
+                // Way 2: filtering with date value only (e.g. 08/22/1990)
+                query = query.Where(p => p.ExpirationDate.HasValue && p.ExpirationDate.Value.Date >= request.ExpirationDateStart.Value.Date);
+                // p.ExpirationDate.HasValue is checked because null values cannot be compared
+
+            // if ExpirationDateEnd has a value
+            if (request.ExpirationDateEnd.HasValue)
+                // apply expiration date end filtering to the query for less than or equal match
+                query = query.Where(p => p.ExpirationDate.HasValue && p.ExpirationDate.Value.Date <= request.ExpirationDateEnd.Value.Date);
+
+            // if CategoryId has a value
+            if (request.CategoryId.HasValue)
+                // apply category ID filtering to the query for exact match
+                query = query.Where(p => p.CategoryId == request.CategoryId.Value);
+
+            // if StoreIds has a list with at least one element
+            if (request.StoreIds.Count > 0) // Any() method can also be used instead of Count > 0
+                                            // apply store IDs filtering to the query for any match
+                query = query.Where(p => p.ProductStores.Any(ps => request.StoreIds.Contains(ps.StoreId)));
+                // check if any of the ProductStores store ID exist in the request's StoreIds list, ps: ProductStore entity delegate
+
+            // project each entity to ProductResponse object and return the list of ProductResponse objects
+            return query.Select(p => new ProductResponse
+            {
+                // assigning entity properties to the response
+                Id = p.Id,
+                Guid = p.Guid,
+                Name = p.Name,
+                UnitPrice = p.UnitPrice,
+                StockAmount = p.StockAmount,
+                ExpirationDate = p.ExpirationDate,
+                CategoryId = p.CategoryId,
+                StoreIds = p.StoreIds,
+
+                // assigning custom or formatted properties to the response
+                UnitPriceF = p.UnitPrice.ToString("C2"),
+                StockAmountF = (p.StockAmount ?? 0).ToString(),
+                ExpirationDateF = p.ExpirationDate.HasValue ? p.ExpirationDate.Value.ToShortDateString() : string.Empty,
+                Category = p.Category.Title,
+                Stores = p.ProductStores.OrderBy(ps => ps.Store.Name).Select(ps => ps.Store.Name).ToList() // ps: ProductStore entity delegate
+            }).ToList();
+        }
     }
 }

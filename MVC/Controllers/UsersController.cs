@@ -199,6 +199,9 @@ namespace MVC.Controllers
         {
             if (ModelState.IsValid) // Validate input model (checks required fields and string lengths through data annotations)
             {
+                // Casting Way 1:
+                //var userService = (UserService)_userService;
+                // Casting Way 2:
                 var userService = _userService as UserService; // Cast to concrete UserService to access Login method
                                                                // since injected IService instance does not have Login method definition
                 var response = await userService.Login(request); // Attempt to authenticate user

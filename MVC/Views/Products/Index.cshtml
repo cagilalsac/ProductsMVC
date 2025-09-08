@@ -40,7 +40,9 @@
                 @if (User.IsInRole("Admin"))
                 {
                     <a asp-action="Create">Create</a>
+                    @:&nbsp;
                 }
+                    <a asp-action="List">Search</a>
                 </div>
             </div>
             <table class="table table-striped table-hover">

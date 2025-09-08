@@ -782,3 +782,30 @@ https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.c
 
 81. In Views/Products/Index.cshtml view, create the link for adding the product to the cart:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Products/Index.cshtml
+
+## 11. Extra Filtering Data - APP Project
+
+82. Create ProductQueryRequest model in APP/Models folder:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/ProductQueryRequest.cs
+
+83. Create ProductsIndexViewModel model in APP/Models folder:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/ProductsIndexViewModel.cs
+
+    - Since views accept only one model instance, view model classes are used to carry more than one 
+      model objects with or without extra objects (such as select lists) to the views. View models 
+      can also be used as an alternative to ViewData (ViewBag) for carrying extra objects to the views. 
+      View models are generally named with the controller name and the action name they are returned from.
+
+84. Add the overloaded List method with ProductQueryRequest parameter at the bottom of ProductService:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Services/ProductService.cs
+
+## 11. Extra Filtering Data - MVC Project
+
+85. Add the List get and post actions at the bottom of ProductsController:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/ProductsController.cs
+
+86. Create List view in the Views/Products folder:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Products/List.cshtml
+
+87. Add Search link directing to the List action of the Products controller in the Products Index view:  
+    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Products/Index.cshtml
