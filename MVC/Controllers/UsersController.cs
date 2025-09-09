@@ -16,9 +16,9 @@ namespace MVC.Controllers
         private readonly IService<UserRequest, UserResponse> _userService;
         private readonly IService<GroupRequest, GroupResponse> _groupService;
 
-        // TODO
-        //private readonly IService<CityRequest, CityResponse> _cityService;
-        //private readonly IService<CountryRequest, CountryResponse> _countryService;
+        // For AJAX:
+        private readonly IService<CityRequest, CityResponse> _cityService;
+        private readonly IService<CountryRequest, CountryResponse> _countryService;
 
         /* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. */
         private readonly IService<RoleRequest, RoleResponse> _RoleService;
@@ -27,9 +27,9 @@ namespace MVC.Controllers
 			IService<UserRequest, UserResponse> userService
             , IService<GroupRequest, GroupResponse> groupService
 
-        // TODO
-        //, IService<CityRequest, CityResponse> cityService
-        //, IService<CountryRequest, CountryResponse> countryService
+        // For AJAX:
+        , IService<CityRequest, CityResponse> cityService
+        , IService<CountryRequest, CountryResponse> countryService
 
         /* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. */
         , IService<RoleRequest, RoleResponse> RoleService
@@ -38,9 +38,9 @@ namespace MVC.Controllers
             _userService = userService;
             _groupService = groupService;
 
-            // TODO
-            //_cityService = cityService;
-            //_countryService = countryService;
+            // For AJAX:
+            _cityService = cityService;
+            _countryService = countryService;
 
             /* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. */
             _RoleService = RoleService;
@@ -55,10 +55,6 @@ namespace MVC.Controllers
 
             // Related items service logic to set ViewData (Id and Name parameters may need to be changed in the SelectList constructor according to the model):
             ViewData["GroupId"] = new SelectList(_groupService.List(), "Id", "Title");
-
-            // TODO
-            //ViewData["CityId"] = new SelectList(_cityService.List(), "Id", "CityName");
-            //ViewData["CountryId"] = new SelectList(_countryService.List(), "Id", "CountryName");
 
             /* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. */
             ViewBag.RoleIds = new MultiSelectList(_RoleService.List(), "Id", "Name");
@@ -85,10 +81,28 @@ namespace MVC.Controllers
             return View(list); // return response collection as model to the Index view
         }
 
+        /// <summary>
+        /// Regular users can only make operations on their own accounts.
+        /// </summary>
+        /// <param name="id">int</param>
+        /// <returns>bool</returns>
+        bool IsOwnAccount(int id) // private is default if not written
+        {
+            // getting the user ID value for the claim type "Id" from the user's claims and checking if it matches the provided id parameter
+            return id.ToString() == (User.Claims.SingleOrDefault(claim => claim.Type == "Id")?.Value ?? string.Empty);
+        }
+
         // GET: Users/Details/5
-        [Authorize(Roles = "Admin")] // Only authenticated users with role Admin can execute this action.
+        [Authorize] // Only authenticated users can execute this action.
         public IActionResult Details(int id)
         {
+            // Check if the user is in Admin role or trying to make the operation on his/her own account.
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             // Get item service logic:
             var item = _userService.Item(id);
             return View(item); // return response item as model to the Details view
@@ -99,6 +113,10 @@ namespace MVC.Controllers
         public IActionResult Create()
         {
             SetViewData(); // set ViewData dictionary to carry extra data other than the model to the view
+
+            // For AJAX: get all the countries for the Country dropdown list
+            ViewData["CountryId"] = new SelectList(_countryService.List(), "Id", "CountryName"); 
+
             return View(); // return Create view with no model
         }
 
@@ -119,24 +137,63 @@ namespace MVC.Controllers
                 ModelState.AddModelError("", response.Message); // to display service error message in the validation summary of the view
             }
             SetViewData(); // set ViewData dictionary to carry extra data other than the model to the view
+
+            // For AJAX: get all the countries for the Country dropdown list with country selected by user's CountryId
+            ViewData["CountryId"] = new SelectList(_countryService.List(), "Id", "CountryName", user.CountryId); 
+
             return View(user); // return request as model to the Create view
         }
 
         // GET: Users/Edit/5
-        [Authorize(Roles = "Admin")] // Only authenticated users with role Admin can execute this action.
+        [Authorize] // Only authenticated users can execute this action.
         public IActionResult Edit(int id)
         {
+            // Check if the user is in Admin role or trying to make the operation on his/her own account.
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             // Get item to edit service logic:
             var item = _userService.Edit(id);
             SetViewData(); // set ViewData dictionary to carry extra data other than the model to the view
+
+            // For AJAX: get all the countries for the Country dropdown list with country selected by item's CountryId
+            ViewData["CountryId"] = new SelectList(_countryService.List(), "Id", "CountryName", item.CountryId);
+
+            // For AJAX: get all the cities by item's CountryId for the City dropdown list with city selected by item's CityId
+            // Casting Way 1:
+            //var cityService = (CityService)_cityService;
+            // Casting Way 2:
+            var cityService = _cityService as CityService; // Cast to concrete CityService to access List by countryId method
+                                                           // since injected IService instance does not have List by countryId method definition
+            ViewData["CityId"] = new SelectList(cityService.List(item.CountryId), "Id", "CityName", item.CityId);
+
             return View(item); // return request as model to the Edit view
         }
 
         // POST: Users/Edit
         [HttpPost, ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")] // Only authenticated users with role Admin can execute this action.
+        [Authorize] // Only authenticated users can execute this action.
         public IActionResult Edit(UserRequest user)
         {
+            // Check if the user is in Admin role or trying to make the operation on his/her own account.
+            if (!IsOwnAccount(user.Id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Because we don't get the values for the Score and RoleIds properties from the user request for users not in
+            // the Admin role, and Score and RoleIds are required, we must remove the ModelState error for the Score and
+            // RoleIds properties to prevent validation failure.
+            if (!User.IsInRole("Admin"))
+            {
+                ModelState.Remove(nameof(UserRequest.Score));
+                ModelState.Remove(nameof(UserRequest.RoleIds));
+            }
+
             if (ModelState.IsValid) // check data annotation validation errors in the request
             {
                 // Update item service logic:
@@ -149,13 +206,29 @@ namespace MVC.Controllers
                 ModelState.AddModelError("", response.Message); // to display service error message in the validation summary of the view
             }
             SetViewData(); // set ViewData dictionary to carry extra data other than the model to the view
+
+            // For AJAX: get all the countries for the Country dropdown list with country selected by user's CountryId
+            ViewData["CountryId"] = new SelectList(_countryService.List(), "Id", "CountryName", user.CountryId);
+
+            // For AJAX: get all the cities by user's CountryId for the City dropdown list with city selected by user's CityId
+            var cityService = _cityService as CityService; // Cast to concrete CityService to access List by countryId method
+                                                           // since injected IService instance does not have List by countryId method definition
+            ViewData["CityId"] = new SelectList(cityService.List(user.CountryId), "Id", "CityName", user.CityId);
+
             return View(user); // return request as model to the Edit view
         }
 
         // GET: Users/Delete/5
-        [Authorize(Roles = "Admin")] // Only authenticated users with role Admin can execute this action.
+        [Authorize] // Only authenticated users can execute this action.
         public IActionResult Delete(int id)
         {
+            // Check if the user is in Admin role or trying to make the operation on his/her own account.
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             // Get item to delete service logic:
             var item = _userService.Item(id);
             return View(item); // return response item as model to the Delete view
@@ -163,12 +236,24 @@ namespace MVC.Controllers
 
         // POST: Users/Delete
         [HttpPost, ValidateAntiForgeryToken, ActionName("Delete")]
-        [Authorize(Roles = "Admin")] // Only authenticated users with role Admin can execute this action.
+        [Authorize] // Only authenticated users can execute this action.
         public IActionResult DeleteConfirmed(int id)
         {
+            // Check if the user is in Admin role or trying to make the operation on his/her own account.
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             // Delete item service logic:
             var response = _userService.Delete(id);
             SetTempData(response.Message); // set TempData dictionary to carry the message to the redirected action's view
+
+            // if the user deleted his/her own account, log out the user
+            if (IsOwnAccount(id))
+                return RedirectToAction(nameof(Logout)); 
+
             return RedirectToAction(nameof(Index)); // redirect to the Index action
         }
 

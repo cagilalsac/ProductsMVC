@@ -44,9 +44,9 @@ namespace APP.Models
         [DisplayName("Group")]
         public int? GroupId { get; set; }
 
-        //[Required(ErrorMessage = "{0} is required!")] // can be defined if each user must have at least one role
+        [Required(ErrorMessage = "{0} is required!")] // each user must have at least one role
         [DisplayName("Roles")]
-        public List<int> RoleIds { get; set; } = new List<int>();
+        public List<int> RoleIds { get; set; }
 
         //[Required(ErrorMessage = "{0} is required!")] // can be defined if each user must belong to a country
         [DisplayName("Country")]

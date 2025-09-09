@@ -182,7 +182,12 @@
                             @if (User.Identity.IsAuthenticated)
                             {
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    @* Way 1: *@
+                                    @* <i class="bx bx-user bx-md me-1"></i><span>@User.Identity.Name</span> *@
+                                    @* Way 2: optional link to direct the user to his/her user details *@
+                                    <a class="nav-link ps-3" asp-area="" asp-action="Details" asp-controller="Users"
+                                        asp-route-id="@User.Claims.SingleOrDefault(claim => claim.Type == "Id")?.Value">
+                                        @* Getting the user's Id from the claims to direct to user to the user details with id route value *@
                                         <i class="bx bx-user bx-md me-1"></i><span>@User.Identity.Name</span>
                                     </a>
                                 </li>

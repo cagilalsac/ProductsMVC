@@ -636,7 +636,7 @@ https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.c
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Users/Login.cshtml  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Users/Register.cshtml
 
-63. Add Login, Register and Logout links in the nav bar (top menu) of the layout view:  
+63. Add Login, Register, Logout and user name links in the nav bar (top menu) of the layout view:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.cshtml
     
     - Authentication cookie existance can be checked by User.Identity.IsAuthenticated in controller actions and views 
@@ -691,17 +691,23 @@ https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.c
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/GroupsController.cs
 
 66. Add the [Authorize(Roles = "Admin,User")] attribute, or [Authorize] attribute since we have only 2 roles, on top of the Index action 
-    of the UsersController class so that authenticated users with all roles can execute the Index action. Then add 
-    [Authorize(Roles = "Admin")] attribute on top of the Details, Create, Edit and Delete get and post actions so that 
-    authenticated users with role Admin can execute these actions. The Login, Logout and Register actions can be executed by everyone 
-    since no Authorize attribute is defined. However, if Authorize attribute was defined at the controller level, we should have used 
-    AllowAnonymous for Login, Logout and Register actions:  
+    of the UsersController class so that authenticated users with all roles can execute the Index action. Then add [Authorize] attribute 
+    on top of the Details, Edit and Delete get and post actions to allow only authenticated users to execute. These actions also include 
+    if the user is trying to make an operation on his/her own account through IsOwnAccount method or the user is in Admin role checks. 
+    Finally add [Authorize(Roles = "Admin")] attribute on top of the Create get and post actions so that authenticated users with role 
+    Admin can execute these actions. The Login, Logout and Register actions can be executed by everyone since no Authorize attribute 
+    is defined. However, if Authorize attribute was defined at the controller level, we should have used AllowAnonymous for Login, 
+    Logout and Register actions:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/UsersController.cs
 
+    Note: Authenticated user's viewing account details and account editing features are optional. You don't need to do as homework. 
+          If you don't want to implement these features, just add [Authorize(Roles = "Admin")] attribute on top of the Details, Create, 
+          Edit and Delete get and post actions to the scaffolded UsersController.
+  
 67. We shouldn't show the links directing to unauthorized controller actions in the views. Therefore, we need to add if the user is in
     Admin role in the layout view for the Roles link. We also need to check if the user is in Admin or User role 
     (checking if user is authenticated is better since we have only 2 roles) for the Groups and Users links. We can show the user name and 
-    Logout link if the user is authenticated, Register and Login links if the user is not authenticated:  
+    Logout links if the user is authenticated, Register and Login links if the user is not authenticated:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.cshtml
 
 68. We also should check if the user is authenticated in the Index view of the Groups since only authenticated users can execute the 
@@ -712,10 +718,12 @@ https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.c
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Groups/Edit.cshtml
 
 69. We should check if the user is in role Admin for the Create, Details, Edit and Delete links in the Index view of the Users. 
-    We should also show the Edit and Delete links in the Details view, and Delete link in the Edit view for the Admin role:  
+    We should also show specific fields only to the Admin users in the Edit view:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Users/Index.cshtml  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Users/Details.cshtml  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Users/Edit.cshtml
+
+    Note: Authenticated user's account editing feature is optional. You don't need to do as homework. If you don't want to implement 
+          this feature, don't modify the scaffolded Edit view of Users.
 
 70. The Authorize attribute is also applied in the Products, Stores and Categories controllers, and authentication is checked in the 
     layout view with the Index views of Products, Stores and Categories for showing the links. This is enough for the homeworks and projects. 
@@ -785,58 +793,78 @@ https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.c
 
 ## 11. Extra Filtering Data - APP Project
 
-82. Create ProductQueryRequest model in APP/Models folder:  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/ProductQueryRequest.cs
+Create ProductQueryRequest model in APP/Models folder:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/ProductQueryRequest.cs
 
-83. Create ProductsIndexViewModel model in APP/Models folder:  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/ProductsIndexViewModel.cs
+Create ProductsIndexViewModel model in APP/Models folder:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/ProductsIndexViewModel.cs
 
-    - Since views accept only one model instance, view model classes are used to carry more than one 
-      model objects with or without extra objects (such as select lists) to the views. View models 
-      can also be used as an alternative to ViewData (ViewBag) for carrying extra objects to the views. 
-      View models are generally named with the controller name and the action name they are returned from.
+- Since views accept only one model instance, view model classes are used to carry more than one 
+  model objects with or without extra objects (such as select lists) to the views. View models 
+  can also be used as an alternative to ViewData (ViewBag) for carrying extra objects to the views. 
+  View models are generally named with the controller name and the action name they are returned from.
 
-84. Add the overloaded List method with ProductQueryRequest parameter at the bottom of ProductService:  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Services/ProductService.cs
+Add the overloaded List method with ProductQueryRequest parameter at the bottom of ProductService:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Services/ProductService.cs
 
 ## 11. Extra Filtering Data - MVC Project
 
-85. Add the List get and post actions at the bottom of ProductsController:  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/ProductsController.cs
+Add the List get and post actions at the bottom of ProductsController:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/ProductsController.cs
 
-86. Create List view in the Views/Products folder:  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Products/List.cshtml
+Create List view in the Views/Products folder:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Products/List.cshtml
 
-    Note: If there are too many records to list and paging will not be implemented, table HTML tag 
-    can be put in a div tag such as:  
-    ```
-    <div style="height:430px;overflow-y:auto;">
-    ```  
-    to add a vertical scroll bar. Height value can be adjusted according to the page design.
+Note: If there are too many records to list and paging will not be implemented, table HTML tag 
+can be put in a div tag such as:  
+```
+<div style="height:430px;overflow-y:auto;">
+```  
+to add a vertical scroll bar. Height value can be adjusted according to the page design.
 
-87. Add Search link directing to the List action of the Products controller in the Products Index view:  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Products/Index.cshtml
+Add Search link directing to the List action of the Products controller in the Products Index view:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Products/Index.cshtml
 
 ## 12. Extra Country and City Entities (Locations): Source code shared in APP and MVC Projects.
 
-88. APP Domain: Country and City entities, add Countries and Cities DbSets in the Db database context  
- 
-    APP Models: CountryRequest, CountryResponse, CityRequest and CityResponse models  
+APP Domain: Country and City entities, add Countries and Cities DbSets in the Db database context  
 
-    APP Services: CountryService and CityService services  
- 
-    MVC IoC Container in Program.cs: builder.AddScoped... for CountryService and builder.AddScoped... for CityService  
+APP Models: CountryRequest, CountryResponse, CityRequest and CityResponse models  
 
-    MVC Controllers: CountriesController and CitiesController controllers with views  
- 
-    MVC Layout: Countries and Cities links  
+APP Services: CountryService and CityService services  
 
-    Notes:  
-    List method with default countryId parameter is added at the bottom of the CityService.  
- 
-    Allowed anonymous Json action, which returns cities JSON, with default countryId parameter is added at the bottom 
-    of the CitiesController.  
- 
-    All controllers are authorized for Admin role.  
+MVC IoC Container in Program.cs: builder.AddScoped... for CountryService and builder.AddScoped... for CityService  
 
-    
+MVC Controllers: CountriesController and CitiesController controllers with views  
+
+MVC Layout: Countries and Cities links  
+
+Notes:  
+List method with default countryId parameter is added at the bottom of the CityService.  
+
+Allowed anonymous Json action, which returns cities JSON, with default countryId parameter is added at the bottom 
+of the CitiesController.  
+
+All controllers are authorized for Admin role.  
+
+## 13. Extra jQuery AJAX (Asynchronous Javascript and XML): Source code shared in MVC Project.
+
+If a view needs an additional process besides the main one (for example, entering and creating or editing user data 
+as in Create and Edit views), AJAX is used for such cases (for example, filling cities based on the selected country by 
+sending a request to the Json action with countryId parameter of the Cities controller).  
+
+AJAX can be used directly with Javascript, but it can also be used more easily through jQuery.  
+
+To use AJAX, you must first go to wwwroot/lib, then select Add -> Client-Side Library, then search for and install 
+"jquery-ajax-unobtrusive". Finally include the script source (reference) in the view where you want to use AJAX as 
+used in Create and Edit views in Views/Users folder:  
+
+https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Users/Create.cshtml  
+https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Users/Edit.cshtml
+
+The UsersController in Controllers folder is also modified for setting countries and cities to ViewData to be used with AJAX:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/UsersController.cs
+
+Note: Applying AJAX is optional, you don't need to do as homework. If you don't want to implement AJAX, you can remove the 
+      code sections regarding to countries and cities in the scaffolded UsersController and scaffolded Users Index, Details, 
+      Create, Edit and Delete views.

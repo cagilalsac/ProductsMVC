@@ -8,6 +8,9 @@
 @{
     var containerDivClass = "container"; // "container-fluid" can be used for full width
     var dateTimePickerClass = "datetimepicker"; // "jquery-datetimepicker" must be added as client side library
+
+    // we should hide some fields from the users without the Admin role for their own account editing
+    var rowDivStyle = User.IsInRole("Admin") ? "" : "display:none";
 }
 @{
     /*
@@ -38,6 +41,7 @@
     <form asp-action="Edit" autocomplete="off">
 	    @Html.AntiForgeryToken()
         <div asp-validation-summary="ModelOnly" class="text-danger"></div> @* Use ModelOnly instead of All to see only service response messages in validation summary *@
+        <input type="hidden" asp-for="Id" />
         <div class="row mb-3">
             <label asp-for="UserName" class="col-2 col-form-label fw-bold"></label>
 	        <div class="col-10">
@@ -83,15 +87,15 @@
 		        <span asp-validation-for="BirthDate" class="text-danger"></span>
 	        </div>
         </div>
-        <div class="row mb-3">
+        <div class="row mb-3" style="@rowDivStyle">
             <label asp-for="Score" class="col-2 col-form-label fw-bold"></label>
-	        <div class="col-10">
-	            <input asp-for="Score" class="form-control" />
-		        <span asp-validation-for="Score" class="text-danger"></span>
-	        </div>
+            <div class="col-10">
+                <input asp-for="Score" class="form-control" />
+                <span asp-validation-for="Score" class="text-danger"></span>
+            </div>
         </div>
-        <div class="row mb-3">
-		    <label asp-for="IsActive" class="col-2 col-form-label fw-bold"></label>
+        <div class="row mb-3" style="@rowDivStyle">
+            <label asp-for="IsActive" class="col-2 col-form-label fw-bold"></label>
 		    <div class="col-10 pt-2">
 			    <input class="form-check-input" asp-for="IsActive" />
             </div>
@@ -103,7 +107,7 @@
 		        <span asp-validation-for="Address" class="text-danger"></span>
 	        </div>
         </div>
-        <div class="row mb-3">
+        <div class="row mb-3" style="@rowDivStyle">
             <label asp-for="GroupId" class="col-2 col-form-label fw-bold"></label>
             <div class="col-10">
 	            <select asp-for="GroupId" class="form-select" asp-items="ViewBag.GroupId">
@@ -112,38 +116,41 @@
 	            <span asp-validation-for="GroupId" class="text-danger"></span>
             </div>
         </div>
-        @* TODO *@
-        @* <div class="row mb-3">
-            <label asp-for="CountryId" class="col-2 col-form-label fw-bold"></label>
-            <div class="col-10">
-                <select asp-for="CountryId" class="form-select" asp-items="ViewBag.CountryId">
-                    <option value="">-- Select --</option>
-                </select>
-                <span asp-validation-for="CountryId" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="row mb-3">
-            <label asp-for="CityId" class="col-2 col-form-label fw-bold"></label>
-            <div class="col-10">
-                <select asp-for="CityId" class="form-select" asp-items="ViewBag.CityId">
-                    <option value="">-- Select --</option>
-                </select>
-                <span asp-validation-for="CityId" class="text-danger"></span>
-            </div>
-        </div> *@
-        <input type="hidden" asp-for="Id" />
 
 
 @* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. *@
         
-        <div class="row mb-3">
+        <div class="row mb-3" style="@rowDivStyle">
             <label asp-for="RoleIds" class="col-2 col-form-label fw-bold"></label>
 	        <div class="col-10">
 		        <select multiple asp-for="RoleIds" class="form-select" asp-items="ViewBag.RoleIds"></select>
 		        <span asp-validation-for="RoleIds" class="text-danger"></span>
 	        </div>
         </div>
-       
+               
+
+
+        @* jQuery AJAX: *@
+        <div class="row mb-3">
+            <label asp-for="CountryId" class="col-2 col-form-label fw-bold"></label>
+			<div class="col-10">
+				<select asp-for="CountryId" class="form-select" asp-items="ViewBag.CountryId" id="countries">
+					<option value="">-- Select Country --</option>
+				</select>
+				<span asp-validation-for="CountryId" class="text-danger" id="countriesmessage"></span>
+			</div>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="CityId" class="col-2 col-form-label fw-bold"></label>
+			<div class="col-10">
+				<select asp-for="CityId" class="form-select" asp-items="ViewBag.CityId" id="cities">
+					<option value="">-- Select Country --</option>
+				</select>
+				<span asp-validation-for="CityId" class="text-danger"></span>
+			</div>
+        </div>
+
+
 
         <hr />
         <div class="row mb-3">
@@ -152,11 +159,8 @@
 		        &nbsp;&nbsp;
                 <button type="reset" class="btn btn-outline-primary">Reset</button>
 		        &nbsp;&nbsp;
-                @if (User.IsInRole("Admin"))
-                {
-                    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
-                    @:&nbsp;&nbsp;
-                }
+                <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+                &nbsp;&nbsp;
 		        <a asp-action="Index">Back to List</a>
 	        </div>
         </div>
@@ -182,5 +186,120 @@
                 // format: 'm/d/Y H:i'
             });
         });
+    </script>
+
+
+
+    @* jQuery AJAX: *@
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script> @* added as client-side library *@
+    <script>
+
+        $(function () { // after the DOM is loaded
+
+            // Filling cities based on the selected country using jQuery AJAX (Asynchronous Javascript and XML):
+            $("#countries").off("change");
+            // If needed, the previously defined event on the HTML element with id 'countries' (a select element) can be removed this way.
+            // Sometimes, if this event is not removed, multiple requests may be sent to the server for the same event.
+            // To test this, you can put a debug pointer in the related controller action and run the application in Debug mode.
+            // If the application stops multiple times at this breakpoint, it means multiple requests are being sent to this action.
+            // In such cases, the event should be removed and re-added.
+
+            $("#countries").change(function() { // change event that runs when a selection is changed in the countries dropdown list
+
+                $("#cities").empty(); // first, completely clear the cities dropdown list so that it can be refilled according to the selected country id
+
+                $("#countriesmessage").text(""); // if the user doesn’t select a country, we will show a message inside a span with the id 'countriesmessage'
+
+                var selectedCountryId = $("#countries").val(); // get the id of the country selected by the user from the countries dropdown list
+
+                if (selectedCountryId == "") { // if the value of the selected option is empty string it means the user selected "-- Select Country --"
+
+                    $("#countriesmessage").text("Please select a country!"); // in this case, show the message asking the user to select a country
+
+                    $("#cities").append('<option value="">-- Select Country --</option>');
+                    // add the "-- Select Country --" option to the cities dropdown list that we cleared earlier.
+                    // Since we use " for attributes in HTML elements, when creating an HTML element in Javascript like here,
+                    // it is easier to use ' for HTML strings.
+
+                } else { // in this case, the user has selected a country
+
+                    // $.getJSON(
+
+                    //     // With jQuery’s getJSON function:
+                    //     // The first parameter is the URL (unified resource locator).
+                    //     // The second parameter is the data (the selected country id, sent as the parameter to the Json action
+                    //     // in the Cities controller).
+                    //     // The result of the AJAX request (the JSON result returned by the controller action) is received inside
+                    //     // the function as the cities collection.
+                    //     // First, we add the "-- Select City --" option to the cities dropdown list, then we loop through the
+                    //     // cities collection and add each city as an option to the dropdown list.
+                    //     // Instead of $.getJSON, you could also use $.ajax for AJAX requests (see the example below).
+
+                    //     "/Cities/Json",
+
+                    //     { countryId: selectedCountryId },
+
+                    //     function (cities) {
+
+                    //         $("#cities").append('<option value="">-- Select City --</option>');
+
+                    //         for (const city of cities) { // loop over each readonly city in the cities collection
+
+                    //             $("#cities").append('<option value="' + city.id + '">' + city.cityName + '</option>');
+                    //             // For example, the data returned in JSON format from ~/Cities/Json/1 is a list of CityResponse objects.
+                    //             // Since the Id and CityName properties start with lowercase letters, we must access them accordingly.
+
+                    //         }
+
+                    //     }
+
+                    // );
+
+
+
+                    // Alternative with $.ajax:
+
+                    $.ajax({
+
+                       cache: false, // prevents the result from being fetched from cache (browser storage), always pulls it from the server
+
+                       url: "/Cities/Json", // URL (unified resource locator) to send the request to
+
+                       type: "get", // specifies whether the action to be called is a "get" or "post" action
+
+                       dataType: "json", // specifies that the response will be in JSON format
+
+                       data: { countryId: selectedCountryId }, // data sent with the request which is the countryId parameter
+
+                       success: function (cities) { // if the request is successful, the response data is received as the cities collection
+
+                           $("#cities").append('<option value="">-- Select City --</option>'); // first, add the "-- Select City --" option
+
+                           for (const city of cities) { // then loop over each readonly city in the cities collection and add it as a select option
+
+                               $("#cities").append('<option value="' + city.id + '">' + city.cityName + '</option>');
+
+                           }
+
+                       },
+
+                       error: function() { // if the request fails, inform the user with an alert and log the error to the browser console
+
+                           alert("An error occurred during AJAX request!");
+
+                           console.log("An error occurred during AJAX request!");
+
+                       }
+
+                    });
+
+
+
+                }
+
+            });
+
+        });
+
     </script>
 }

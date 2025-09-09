@@ -62,7 +62,7 @@ namespace APP.Services
                 Id = country.Id,
                 Guid = country.Guid,
                 CountryName = country.CountryName,
-                Cities = country.Cities.Select(city => new CityResponse
+                Cities = country.Cities.OrderBy(city => city.CityName).Select(city => new CityResponse
                 {
                     Id = city.Id,
                     Guid = city.Guid,
@@ -78,7 +78,7 @@ namespace APP.Services
                 Id = country.Id,
                 Guid = country.Guid,
                 CountryName = country.CountryName,
-                Cities = country.Cities.Select(city => new CityResponse
+                Cities = country.Cities.OrderBy(city => city.CityName).Select(city => new CityResponse
                 {
                     Id = city.Id,
                     Guid = city.Guid,

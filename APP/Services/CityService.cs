@@ -14,7 +14,7 @@ namespace APP.Services
 
         protected override IQueryable<City> Query(bool isNoTracking = true)
         {
-            return base.Query(isNoTracking).Include(c => c.Country).OrderBy(c => c.CityName);
+            return base.Query(isNoTracking).Include(c => c.Country).OrderBy(c => c.Country.CountryName).ThenBy(c => c.CityName);
         }
 
         public CommandResponse Create(CityRequest request)
@@ -103,28 +103,19 @@ namespace APP.Services
 
 
         // get a filtered list of City response items filtered by country ID,
-        // if countryId is null, return all City response items
+        // if countryId is null, return an empty City response list
         public List<CityResponse> List(int? countryId)
         {
-            // get all City entities
-            var query = Query();
+            // if countryId is null, return an empty City response list
+            if (!countryId.HasValue) // if (countryId == null) or if (countryId is null) may also be written
+                return new List<CityResponse>();
 
-            // if countryId has a value, filter the entity query by countryId value
-            if (countryId.HasValue)
-                query = query.Where(c => c.CountryId == countryId.Value);
-
-            // project the entity query to a list of City response items and return it
-            return query.Select(c => new CityResponse
+            // filter the City entity query by countryId value and project the City entity query to City response query then return the list
+            return Query().Where(c => c.CountryId == countryId.Value).Select(c => new CityResponse
             {
                 Id = c.Id,
                 Guid = c.Guid,
-                CityName = c.CityName,
-                Country = new CountryResponse
-                {
-                    Id = c.Country.Id,
-                    Guid = c.Country.Guid,
-                    CountryName = c.Country.CountryName
-                }
+                CityName = c.CityName
             }).ToList();
         }
     }

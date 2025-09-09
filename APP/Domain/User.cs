@@ -48,7 +48,7 @@ namespace APP.Domain
         public List<int> RoleIds
         {
             get => UserRoles.Select(userRoleEntity => userRoleEntity.RoleId).ToList();
-            set => UserRoles = value.Select(roleId => new UserRole() { RoleId = roleId }).ToList();
+            set => UserRoles = value?.Select(roleId => new UserRole() { RoleId = roleId }).ToList();
         }
     }
 }

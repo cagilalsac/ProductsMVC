@@ -35,7 +35,11 @@ namespace APP.Services
 
         protected override IQueryable<User> Query(bool isNoTracking = true)
         {
-            return base.Query(isNoTracking).Include(u => u.UserRoles).ThenInclude(ur => ur.Role).Include(u => u.Group)
+            return base.Query(isNoTracking)
+                .Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
+                .Include(u => u.Group)
+                .Include(u => u.Country)
+                .Include(u => u.City)
                 .OrderByDescending(u => u.IsActive).ThenBy(u => u.RegistrationDate).ThenBy(u => u.UserName);
         }
 
