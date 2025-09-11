@@ -127,6 +127,10 @@
                             }
                         }
 
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Locations" asp-action="InnerJoinIndex">Countries and Cities</a>
+                        </li>
+
                     </ul>
 
                     @* User authentication links: will be displayed at the right side of the menu by the below Bootstrap classes *@
@@ -134,7 +138,7 @@
                         <ul class="navbar-nav me-auto">
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <li class="nav-item pt-2 pe-2">
+                                <li class="nav-item">
 
                                     @* Way 1: *@
                                     @* <span>@User.Identity.Name</span> *@

@@ -25,11 +25,11 @@ namespace MVC.Controllers
         [Route("SeedDb")] // will change the route of the action to /SeedDb instead of /Database/Seed
         public IActionResult Seed()
         {
-            // If the running application's environment is not development, prevent seeding initial data to the database
+            // Can be uncommented to check if the running application's environment is not development, prevent seeding initial data to the database
             // and return error HTML content.
-            if (!_environment.IsDevelopment())
-                return Content("<label style='color:red;'>The seed operation can only be performed in development environment!</label>",
-                                "text/html", Encoding.UTF8);
+            //if (!_environment.IsDevelopment())
+            //    return Content("<label style='color:red;'>The seed operation can only be performed in development environment!</label>",
+            //                    "text/html", Encoding.UTF8);
 
             // Remove existing data
             var productStores = _db.ProductStores.ToList();
@@ -466,6 +466,13 @@ namespace MVC.Controllers
                     new City { Guid = Guid.NewGuid().ToString(), CityName = "Arlington" },
                     new City { Guid = Guid.NewGuid().ToString(), CityName = "New Orleans" }
                 }
+            });
+
+            // Add a new Country entity for China with no cities.
+            _db.Countries.Add(new Country
+            {
+                Guid = Guid.NewGuid().ToString(),
+                CountryName = "China",
             });
 
             _db.SaveChanges();

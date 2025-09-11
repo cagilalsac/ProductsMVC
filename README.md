@@ -783,7 +783,7 @@ https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.c
 79. Create Index view in the Views/Carts folder:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Carts/Index.cshtml
 
-80. Add Cart link in the nav bar of the layout view:  
+80. Add Cart link to the layout view:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.cshtml  
     or  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_SneatLayout.cshtml
@@ -868,3 +868,52 @@ https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/UsersContr
 Note: Applying AJAX is optional, you don't need to do as homework. If you don't want to implement AJAX, you can remove the 
       code sections regarding to countries and cities in the scaffolded UsersController and scaffolded Users Index, Details, 
       Create, Edit and Delete views.
+
+## 14. Extra Extensions, Paging, Ordering, Inner and Left Joins: Source code shared in CORE, APP and MVC Projects.
+
+CORE:  
+
+Create IPageRequest interface for a base for paging operations in CORE/APP/Models/Paging folder:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/CORE/APP/Models/Paging/IPageRequest.cs
+
+Create IOrderRequest interface for a base for ordering operations in CORE/APP/Models/Ordering folder:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/CORE/APP/Models/Ordering/IOrderRequest.cs
+
+Create StringExtensions class for extending the string type with new methods such as HasNotAny and HasAny methods instead of 
+string.IsNullOrEmpty or string.IsNullOrWhiteSpace methods in CORE/APP/Extensions folder:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/CORE/APP/Extensions/StringExtensions.cs
+
+APP:  
+
+Create LocationQueryRequest for filtering locations with paging and ordering in APP/Models folder:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/LocationQueryRequest.cs
+
+Create LocationQueryResponse as a DTO (Data Transfer Object) returned from the join operations in APP/Models folder:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/LocationQueryResponse.cs
+
+Create LocationsIndexViewModel for carrying a LocationQueryRequest property and a list of LocationQueryResponse property 
+with page number list, record count per page list and order list properties to the view in APP/Models folder:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/LocationsIndexViewModel.cs
+
+Create LocationQueryService for inner and left join operations with filtering, paging and ordering in APP/Services folder:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Services/LocationQueryService.cs
+
+MVC:  
+
+Add builder.Services.AddScoped... for types ILocationQueryService and LocationQueryService in the IoC Container 
+of the Program.cs:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Program.cs
+
+Create LocationsController in Controllers folder:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Controllers/LocationsController.cs
+
+Create InnerJoinIndex view in Views/Locations folder:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Locations/InnerJoinIndex.cshtml
+
+Create LeftJoinIndex view in Views/Locations folder:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Locations/LeftJoinIndex.cshtml
+
+Add Countries and Cities link to the layout view:  
+https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.cshtml  
+or  
+https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_SneatLayout.cshtml

@@ -8,11 +8,11 @@
         /// <summary>
         /// Gets or sets the name of the entity property to order by.
         /// </summary>
-        public string EntityPropertyName { get; set; }
+        public string OrderEntityPropertyName { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the ordering is descending.
         /// </summary>
-        public bool IsDescending { get; set; }
+        public bool IsOrderDescending { get; set; }
     }
 }

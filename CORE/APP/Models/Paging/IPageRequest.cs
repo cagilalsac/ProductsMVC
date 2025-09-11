@@ -19,6 +19,6 @@
         /// Gets or sets the total number of records available (for informational purposes).
         /// JsonIgnore attribute can be defined to ignore this property during JSON serialization for API requests.
         /// </summary>
-        public int TotalCount { get; set; }
+        public int TotalCountForPaging { get; set; }
     }
 }
