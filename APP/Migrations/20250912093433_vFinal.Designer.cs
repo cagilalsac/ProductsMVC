@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APP.Migrations
 {
     [DbContext(typeof(Db))]
-    [Migration("20250908105537_vFinal")]
+    [Migration("20250912093433_vFinal")]
     partial class vFinal
     {
         /// <inheritdoc />
@@ -296,7 +296,7 @@ namespace APP.Migrations
                     b.HasOne("APP.Domain.Country", "Country")
                         .WithMany("Cities")
                         .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Country");
@@ -307,7 +307,7 @@ namespace APP.Migrations
                     b.HasOne("APP.Domain.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Category");
@@ -318,13 +318,13 @@ namespace APP.Migrations
                     b.HasOne("APP.Domain.Product", "Product")
                         .WithMany("ProductStores")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("APP.Domain.Store", "Store")
                         .WithMany("ProductStores")
                         .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Product");
@@ -335,16 +335,19 @@ namespace APP.Migrations
             modelBuilder.Entity("APP.Domain.User", b =>
                 {
                     b.HasOne("APP.Domain.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId");
+                        .WithMany("Users")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("APP.Domain.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId");
+                        .WithMany("Users")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("APP.Domain.Group", "Group")
                         .WithMany("Users")
-                        .HasForeignKey("GroupId");
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("City");
 
@@ -358,13 +361,13 @@ namespace APP.Migrations
                     b.HasOne("APP.Domain.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("APP.Domain.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Role");
@@ -377,9 +380,16 @@ namespace APP.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("APP.Domain.City", b =>
+                {
+                    b.Navigation("Users");
+                });
+
             modelBuilder.Entity("APP.Domain.Country", b =>
                 {
                     b.Navigation("Cities");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("APP.Domain.Group", b =>

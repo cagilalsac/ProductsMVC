@@ -847,6 +847,14 @@ of the CitiesController.
 
 All controllers are authorized for Admin role.  
 
+Note (Optional):  
+Database configurations such as using no action (will not allow to delete the records from the relational table (City) 
+when a record is deleted from the main table (Country)) instead of cascade (which will automatically delete the records 
+from the relational table (City) when a record is deleted from the main table (Country)) between tables may be done by 
+overriding the OnModelCreating method of the Db database context class. Default is cascade in Entity Framework Core. 
+Changing column configurations instead of using data annotations in entities (e.g. making a column required or setting 
+maximum length), changing table names etc. can also be done in the OnModelCreating method among other configurations.
+
 ## 13. Extra jQuery AJAX (Asynchronous Javascript and XML): Source code shared in MVC Project.
 
 If a view needs an additional process besides the main one (for example, entering and creating or editing user data 
