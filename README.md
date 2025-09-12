@@ -13,6 +13,9 @@ Note: A simplified version of the N-Layered Architecture and Repository Pattern 
 Note: Domain is for data access from a database, services are for business logic and MVC is for presentation. 
       CQRS (Command Query Response Segregation) Pattern is also applied to this project.
 
+Note: The source code of the project with search options can also be found at:  
+      https://need4code.com/DotNet/Home/Index?path=.NET%5C05_MVC_Products
+
 ## 1. Environment and Tools
 
 1. Visual Studio Community installation for Windows:  
