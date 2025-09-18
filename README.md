@@ -34,7 +34,7 @@ Note: The source code of the project with search options can also be found at:
 5. Give the Project name MVC. You may change the solution folder in Location. Give the Solution name your project name. Place solution and project in the 
    same directory sould not be checked.
 
-6 (Week 1). Select ".NET 8.0" as the "Framework", choose "None" for "Authentication type", check "Configure for HTTPS", do not check "Enable container support", 
+6. (Week 1) Select ".NET 8.0" as the "Framework", choose "None" for "Authentication type", check "Configure for HTTPS", do not check "Enable container support", 
             do not check "Do not use top-levet statements" and do not check "Enlist in .NET Aspire orchestration".
 
 ## 3. MVC Project: General topics explained in details in this file and solution's projects' files.
