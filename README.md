@@ -161,7 +161,7 @@ Note: The source code of the project with search options can also be found at:
 20. Open appsettings.json and add the ConnectionStrings section:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/appsettings.json
 
-21. Open Program.cs and add builder.Services.AddDbContext...  
+21. (Week 2) Open Program.cs and add builder.Services.AddDbContext...  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Program.cs
 
 22. Create your ProductsDB database using migrations:  
