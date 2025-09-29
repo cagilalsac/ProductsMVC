@@ -37,6 +37,12 @@ Note: The source code of the project with search options can also be found at:
 6. (Week 1) Select ".NET 8.0" as the "Framework", choose "None" for "Authentication type", check "Configure for HTTPS", do not check "Enable container support", 
             do not check "Do not use top-levet statements" and do not check "Enlist in .NET Aspire orchestration".
 
+Note: When you run your application in Rider on Mac and if you get the exception below:  
+Failed to read NuGet.Config due to unauthorized access. Path: '/Users/YourUserFolder/.nuget/NuGet/NuGet.Config'  
+you should run the following commands in the terminal of Rider:  
+sudo chown $USER ~/.nuget/NuGet/NuGet.Config  
+chmod 644 ~/.nuget/NuGet/NuGet.Config
+
 ## 3. MVC Project: General topics explained in details in this file and solution's projects' files.
 
 7. Controller classes have action methods that handle the incoming HTTP get or post requests, optionally interact with entity data in the database through 

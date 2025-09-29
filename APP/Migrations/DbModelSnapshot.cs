@@ -58,6 +58,9 @@ namespace APP.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CityName")
+                        .IsUnique();
+
                     b.HasIndex("CountryId");
 
                     b.ToTable("Cities");
@@ -79,6 +82,9 @@ namespace APP.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CountryName")
+                        .IsUnique();
+
                     b.ToTable("Countries");
                 });
 
@@ -97,6 +103,9 @@ namespace APP.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Title")
+                        .IsUnique();
 
                     b.ToTable("Groups");
                 });
@@ -173,6 +182,9 @@ namespace APP.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Roles");
                 });
@@ -260,6 +272,11 @@ namespace APP.Migrations
                     b.HasIndex("CountryId");
 
                     b.HasIndex("GroupId");
+
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
+                    b.HasIndex("FirstName", "LastName");
 
                     b.ToTable("Users");
                 });

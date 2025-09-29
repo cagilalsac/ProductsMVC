@@ -218,9 +218,27 @@ namespace APP.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cities_CityName",
+                table: "Cities",
+                column: "CityName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Cities_CountryId",
                 table: "Cities",
                 column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Countries_CountryName",
+                table: "Countries",
+                column: "CountryName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Groups_Title",
+                table: "Groups",
+                column: "Title",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
@@ -236,6 +254,12 @@ namespace APP.Migrations
                 name: "IX_ProductStores_StoreId",
                 table: "ProductStores",
                 column: "StoreId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Roles_Name",
+                table: "Roles",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",
@@ -258,9 +282,20 @@ namespace APP.Migrations
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Users_FirstName_LastName",
+                table: "Users",
+                columns: new[] { "FirstName", "LastName" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_GroupId",
                 table: "Users",
                 column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_UserName",
+                table: "Users",
+                column: "UserName",
+                unique: true);
         }
 
         /// <inheritdoc />
