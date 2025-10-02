@@ -342,7 +342,7 @@ chmod 644 ~/.nuget/NuGet/NuGet.Config
     - This controller will be replaced with the CategoriesController which will inject the generic service interface in the future. 
       This is why the name is given "Obsolete".
 
-28. Right-click on each controller action to add their Razor empty views with names Index, Details, Create and Edit. No need to add the Delete view 
+28. (Week 3) Right-click on each controller action to add their Razor empty views with names Index, Details, Create and Edit. No need to add the Delete view 
     since the delete operation is performed in the get action. Don't forget the implement ViewData or TempData dictionaries set in actions 
     to show messages in the views.  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/CategoriesObsolete/Index.cshtml  
