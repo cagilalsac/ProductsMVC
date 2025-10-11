@@ -42,6 +42,34 @@
             @Html.DisplayFor(model => model.CityName)
         </div>
     </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.Country)
+        </div>
+        <div class="col-10">
+            @Html.DisplayFor(model => model.Country.CountryName)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 fw-bold">
+            @Html.DisplayNameFor(model => model.FilePath)
+        </div>
+        @if (string.IsNullOrWhiteSpace(Model.FilePath))
+        {
+        <div class="col-5">
+            <span><i class="bx bx-image" style="font-size:xx-large;"></i></span>
+        </div>
+        }
+        else 
+        {
+        <div class="col-7">
+            <img src="@Model.FilePath" class="d-block img-fluid" />
+        </div>
+        <div class="col-3">
+            <a asp-action="DeleteFile" asp-route-id="@Model.Id" asp-route-filePath="@Model.FilePath" class="text-danger">Delete File</a>
+        </div>
+        }
+    </div>
 
 @* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. 
     Raw HTML Helper is used in case string parameter may have HTML tags. *@

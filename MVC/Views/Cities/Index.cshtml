@@ -40,38 +40,49 @@
                     <a asp-action="Create">Create</a>
                 </div>
             </div>
-            <div style="height:575px;overflow-y:auto;">
-                <table class="table table-striped table-hover">
-                    <thead class="table-secondary">
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.CityName)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Country)
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-		                @foreach (var item in Model) {
-				            <tr>
-					            <td>
-						            @Html.DisplayFor(modelItem => item.CityName)
-					            </td>
-					            <td>
-						            @Html.DisplayFor(modelItem => item.Country.CountryName)
-					            </td>
-					            <td class="text-end w-25">
-						            <a asp-action="Details" asp-route-id="@item.Id">Details</a>&nbsp;|&nbsp;
-						            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>&nbsp;|&nbsp;
-						            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-					            </td>
-				            </tr>
-		                }
-                    </tbody>
-                </table>
-            </div>
+            <table class="table table-striped table-hover">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CityName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Country)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FilePath)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+		            @foreach (var item in Model) {
+				        <tr>
+					        <td>
+						        @Html.DisplayFor(modelItem => item.CityName)
+					        </td>
+					        <td>
+						        @Html.DisplayFor(modelItem => item.Country.CountryName)
+					        </td>
+                            <td style="width:30%;">
+                            @if (string.IsNullOrWhiteSpace(item.FilePath))
+                            {
+                                <span><i class="bx bx-image" style="font-size:x-large;"></i></span>
+                            }
+                            else
+                            {
+                                <img src="@item.FilePath" class="img-thumbnail" />
+                            }
+                            </td>
+					        <td class="text-end w-25">
+						        <a asp-action="Details" asp-route-id="@item.Id">Details</a>&nbsp;|&nbsp;
+						        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>&nbsp;|&nbsp;
+						        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+					        </td>
+				        </tr>
+		            }
+                </tbody>
+            </table>
         </div>
     </form>
 }

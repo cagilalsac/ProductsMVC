@@ -3,6 +3,7 @@ using APP.Models;
 using APP.Services;
 using CORE.APP.Services;
 using CORE.APP.Services.Authentication.MVC;
+using CORE.APP.Services.Files.MVC;
 using CORE.APP.Services.Session.MVC;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -85,6 +86,7 @@ builder.Services.AddScoped<SessionServiceBase, SessionService>();
 builder.Services.AddScoped<ICartService, CartService>();
 
 // Locations:
+builder.Services.AddScoped<FileServiceBase, FileService>();
 builder.Services.AddScoped<IService<CountryRequest, CountryResponse>, CountryService>();
 builder.Services.AddScoped<IService<CityRequest, CityResponse>, CityService>();
 builder.Services.AddScoped<ILocationQueryService, LocationQueryService>();

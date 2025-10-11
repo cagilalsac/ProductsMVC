@@ -53,6 +53,9 @@ namespace APP.Migrations
                     b.Property<int>("CountryId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("FilePath")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Guid")
                         .HasColumnType("TEXT");
 

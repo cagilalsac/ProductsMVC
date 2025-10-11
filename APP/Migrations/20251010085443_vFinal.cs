@@ -114,6 +114,7 @@ namespace APP.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     CityName = table.Column<string>(type: "TEXT", maxLength: 175, nullable: false),
                     CountryId = table.Column<int>(type: "INTEGER", nullable: false),
+                    FilePath = table.Column<string>(type: "TEXT", nullable: true),
                     Guid = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>

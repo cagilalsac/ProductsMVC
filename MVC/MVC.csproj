@@ -29,4 +29,8 @@
     <ProjectReference Include="..\APP\APP.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\files\" />
+  </ItemGroup>
+
 </Project>

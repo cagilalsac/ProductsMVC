@@ -1,10 +1,10 @@
 ﻿#nullable disable
+using APP.Models;
+using APP.Services;
+using CORE.APP.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using CORE.APP.Services;
-using APP.Models;
-using Microsoft.AspNetCore.Authorization;
-using APP.Services;
 
 // Generated from Custom MVC Template.
 
@@ -21,11 +21,11 @@ namespace MVC.Controllers
         //private readonly IService<EntityRequest, EntityResponse> _EntityService;
 
         public CitiesController(
-            IService<CityRequest, CityResponse> cityService
+			IService<CityRequest, CityResponse> cityService
             , IService<CountryRequest, CountryResponse> countryService
 
-        /* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. */
-        //, IService<EntityRequest, EntityResponse> EntityService
+            /* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. */
+            //, IService<EntityRequest, EntityResponse> EntityService
         )
         {
             _cityService = cityService;
@@ -44,7 +44,7 @@ namespace MVC.Controllers
 
             // Related items service logic to set ViewData (Id and Name parameters may need to be changed in the SelectList constructor according to the model):
             ViewData["CountryId"] = new SelectList(_countryService.List(), "Id", "CountryName");
-
+            
             /* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. */
             //ViewBag.EntityIds = new MultiSelectList(_EntityService.List(), "Id", "Name");
         }
@@ -159,6 +159,15 @@ namespace MVC.Controllers
             var cityService = _cityService as CityService;
             var list = cityService.List(countryId);
             return Json(list);
+        }
+
+        // Deleting a city's file by city ID and image file path, then redirecting to the Details action:
+        // GET: Cities/DeleteFile/5?filePath=/files/391b14c9-ce61-4cef-bcce-93c38f447f74.jpg
+        public IActionResult DeleteFile(int id, string filePath)
+        {
+            var cityService = _cityService as CityService;
+            cityService.DeleteFile(id, filePath);
+            return RedirectToAction(nameof(Details), new { id });
         }
     }
 }

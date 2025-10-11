@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APP.Migrations
 {
     [DbContext(typeof(Db))]
-    [Migration("20250929155024_vFinal")]
+    [Migration("20251010085443_vFinal")]
     partial class vFinal
     {
         /// <inheritdoc />
@@ -55,6 +55,9 @@ namespace APP.Migrations
 
                     b.Property<int>("CountryId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Guid")
                         .HasColumnType("TEXT");

@@ -477,6 +477,13 @@ namespace MVC.Controllers
 
             _db.SaveChanges();
 
+            // Clean up wwwroot/files directory by deleting all files in it.
+            var files = Directory.GetFiles(Path.Combine("wwwroot", "files"));
+            foreach (var file in files)
+            {
+                System.IO.File.Delete(file);
+            }
+
             // Return a success message as HTML content
             return Content("<label style='color:green;'>Database seed successful.</label>", "text/html", Encoding.UTF8);
         }

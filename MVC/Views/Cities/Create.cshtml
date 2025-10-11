@@ -31,7 +31,7 @@
         @TempData["Message"]
     </p>
     }
-    <form asp-action="Create" autocomplete="off">
+    <form asp-action="Create" autocomplete="off" enctype="multipart/form-data">
 		@Html.AntiForgeryToken()
         <div asp-validation-summary="All" class="text-danger"></div> @* Use ModelOnly instead of All to see only service response messages in validation summary *@
         <div class="row mb-3">
@@ -49,6 +49,12 @@
 				</select>
 				<span asp-validation-for="CountryId" class="text-danger"></span>
 			</div>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="FormFile" class="col-2 col-form-label fw-bold"></label>
+            <div class="col-10">
+                <input asp-for="FormFile" class="form-control" type="file" />
+            </div>
         </div>
 
 @* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. *@

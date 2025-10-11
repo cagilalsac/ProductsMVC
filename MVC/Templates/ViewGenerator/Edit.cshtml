@@ -68,7 +68,7 @@
         @:@@TempData["Message"]
     @:</p>
     @:}
-    @:<form asp-action="@Model.ViewName" autocomplete="off">
+    @:<form asp-action="@Model.ViewName" autocomplete="off" enctype="multipart/form-data">
 	    @:@@Html.AntiForgeryToken()
         @:<div asp-validation-summary="All" class="text-danger"></div> @@* Use ModelOnly instead of All to see only service response messages in validation summary *@@
 foreach (PropertyMetadata property in Model.ModelMetadata.Properties)
@@ -131,6 +131,15 @@ if (property.PropertyName != "Guid" && property.PropertyName != "IsDeleted" && p
 		        @:<input asp-for="@property.PropertyName" class="form-control @@dateTimePickerClass" type="text" />
 		        @:<span asp-validation-for="@property.PropertyName" class="text-danger"></span>
 	        @:</div>
+        @:</div>
+        }
+        else if (property.PropertyName == "FilePath")
+        {
+        @:<div class="row mb-3">
+            @:<label asp-for="FormFile" class="col-2 col-form-label fw-bold"></label>
+            @:<div class="col-10">
+                @:<input asp-for="FormFile" class="form-control" type="file" />
+            @:</div>
         @:</div>
         }
         else

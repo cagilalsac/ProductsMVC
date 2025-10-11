@@ -342,12 +342,12 @@ chmod 644 ~/.nuget/NuGet/NuGet.Config
     - This controller will be replaced with the CategoriesController which will inject the generic service interface in the future. 
       This is why the name is given "Obsolete".
 
-28. (Week 3) Right-click on each controller action to add their Razor empty views with names Index, Details, Create and Edit. No need to add the Delete view 
+28. (Week 3, 4) Right-click on each controller action to add their Razor empty views with names Index, Details, Create and Edit. No need to add the Delete view 
     since the delete operation is performed in the get action. Don't forget the implement ViewData or TempData dictionaries set in actions 
     to show messages in the views.  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/CategoriesObsolete/Index.cshtml  
+    (Week 3) https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/CategoriesObsolete/Index.cshtml  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/CategoriesObsolete/Details.cshtml  
-    https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/CategoriesObsolete/Create.cshtml  
+    (Week 4) https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/CategoriesObsolete/Create.cshtml  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/CategoriesObsolete/Edit.cshtml
 
     - Some commonly used HTML Helpers in ASP.NET Core MVC:  
@@ -834,7 +834,13 @@ to add a vertical scroll bar. Height value can be adjusted according to the page
 Add Search link directing to the List action of the Products controller in the Products Index view:  
 https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Products/Index.cshtml
 
-## 12. Extra Country and City Entities (Locations): Source code shared in APP and MVC Projects.
+## 12. Extra Country and City Entities (Locations) with File Operations for Cities: Source code shared in APP and MVC Projects.
+
+CORE Domain/Files: IFileEntity interface  
+
+CORE Models/Files: IFileRequest and IFileResponse interfaces  
+
+CORE Services/Files/MVC: FileServiceBase and FileService classes  
 
 APP Domain: Country and City entities, add Countries and Cities DbSets in the Db database context  
 
@@ -842,17 +848,24 @@ APP Models: CountryRequest, CountryResponse, CityRequest and CityResponse models
 
 APP Services: CountryService and CityService services  
 
-MVC IoC Container in Program.cs: builder.AddScoped... for CountryService and builder.AddScoped... for CityService  
+MVC IoC Container in Program.cs: builder.AddScoped... for FileService, CountryService and CityService  
 
 MVC Controllers: CountriesController and CitiesController controllers with views  
 
 MVC Layout: Countries and Cities links  
 
+MVC wwwroot: "files" folder  
+
 Notes:  
 List method with default countryId parameter is added at the bottom of the CityService.  
 
+DeleteFile method with id and filePath parameters is added at the bottom of the CityService.  
+
 Allowed anonymous Json action, which returns cities JSON, with default countryId parameter is added at the bottom 
 of the CitiesController.  
+
+DeleteFile action, which deletes the city's image file from the "files" folder in the "wwwroot" folder by city ID and 
+image file path, is added at the bottom of the CitiesController.  
 
 All controllers are authorized for Admin role.  
 

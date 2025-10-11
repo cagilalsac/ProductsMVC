@@ -115,15 +115,31 @@
 					        if (propertyLookup.TryGetValue(item.Name, out IPropertyMetadata property)
 						        && property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey)
 					        {
-					        <td>
-						        @@Html.DisplayFor(modelItem => item.@GetValueExpression(property))
-					        </td>
+                            if (item.Name == "FilePath")
+                            {
+                            @:<td style="width:10%;">
+                            @:@@if (string.IsNullOrWhiteSpace(item.FilePath))
+                            @:{
+                                @:<span><i class="bx bx-image" style="font-size:x-large;"></i></span>
+                            @:}
+                            @:else
+                            @:{
+                                @:<img src="@@item.FilePath" class="img-thumbnail" />
+                            @:}
+                            @:</td>
+                            }
+                            else
+                            {
+					        @:<td>
+						        @:@@Html.DisplayFor(modelItem => item.@GetValueExpression(property))
+					        @:</td>
+                            }
 					        }
 					        else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation))
 					        {
-					        <td>
-						        @@Html.DisplayFor(modelItem => item.@GetValueExpression(navigation))
-					        </td>
+					        @:<td>
+						        @:@@Html.DisplayFor(modelItem => item.@GetValueExpression(navigation))
+					        @:</td>
 					        }
 				        }
                         }
