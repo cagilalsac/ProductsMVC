@@ -401,7 +401,7 @@ chmod 644 ~/.nuget/NuGet/NuGet.Config
 30. Implement a base abstract generic service class for entity CRUD (Create, Read, Update, Delete) operations in CORE/APP/Services:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/CORE/APP/Services/Service.cs
 
-31. Implement a base generic service interface for request and response method definitions in CORE/APP/Services/MVC:  
+31. (Week 5) Implement a base generic service interface for request and response method definitions in CORE/APP/Services/MVC:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/CORE/APP/Services/MVC/IService.cs
 
 ## 7. Store and Product Entities - APP Project
@@ -500,6 +500,11 @@ Note: The entities and DbContext class should be implemented first. Second, requ
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Stores/Create.cshtml  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Stores/Edit.cshtml  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Stores/Delete.cshtml
+  
+    Note: For Rider run:  
+    "dotnet aspnet-codegenerator controller -name {ModelName}Controller -m {Namespace}.{ModelName} -dc {Namespace}.{DbContextName} 
+    --relativeFolderPath Controllers"  
+    in the terminal for scaffolding with the templates under the Templates folder.
 
     Note: Client-side validation through jQuery instead of Server-side validation is enabled at the bottom in Create and Edit views.
 
