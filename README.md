@@ -176,7 +176,12 @@ chmod 644 ~/.nuget/NuGet/NuGet.Config
     - Run:  
       add-migration v1  
       update-database  
-    - For Rider, use the UI as described in JetBrains documentation.  
+    - For Rider, you can use the UI as described in JetBrains documentation, or from the terminal  
+      Install:  
+      dotnet tool install -g dotnet-ef  
+      Run:  
+      dotnet ef migrations add v1  
+      dotnet ef database update -p APP -s MVC  
     - You can see the created ProductsDB database file in MVC Project.  
     - Optionally in Visual Studio, you can install the SQLite and SQL Server Compact Toolbox extension 
       from Visual Studio menu -> Extensions -> Manage Extensions to connect to the created ProductsDB SQLite database.
@@ -431,7 +436,10 @@ Note: The entities and DbContext class should be implemented first. Second, requ
     - Run:  
       add-migration v2  
       update-database  
-    - For Rider, use the UI as described in JetBrains documentation.
+    - For Rider, you can use the UI as described in JetBrains documentation, or from the terminal  
+      Run:  
+      dotnet ef migrations add v2  
+      dotnet ef database update -p APP -s MVC  
 
 38. Under Models folder of the APP Project, create the ProductRequest class:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Models/ProductRequest.cs
