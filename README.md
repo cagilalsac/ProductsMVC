@@ -466,7 +466,7 @@ Note: The entities and DbContext class should be implemented first. Second, requ
     base abstract generic entity Service class and implementing base generic request and response IService interface:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Services/StoreService.cs
 
-44. Under Services folder of the APP Project, create the CategoryService class inheriting from the 
+44. (Week 6) Under Services folder of the APP Project, create the CategoryService class inheriting from the 
     base abstract generic entity Service class and implementing base generic request and response IService interface:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/APP/Services/CategoryService.cs
 
@@ -569,7 +569,7 @@ Note: The entities and DbContext class should be implemented first. Second, requ
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Categories/Edit.cshtml  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Categories/Delete.cshtml
 
-52. Add Categories link in the nav bar (top menu) of the layout view:  
+52. (Week 7) Add Categories link in the nav bar (top menu) of the layout view:  
     https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.cshtml
 
 53. Add Title and App sections in appsettings.json:  
