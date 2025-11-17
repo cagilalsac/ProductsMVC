@@ -619,6 +619,8 @@ https://github.com/cagilalsac/ProductsMVC/tree/master/MVC/Views/Shared/_Layout.c
 
 ## 9. Cookie Authentication and Authorization - CORE Project
 
+Note: Install Microsoft.AspNetCore.Authentication.Cookies latest version package from NuGet to the CORE Project.
+
 55. Create the base authentication service class named AuthServiceBase in CORE Project's APP/Services/Authentication folder.  
     https://github.com/cagilalsac/ProductsMVC/tree/master/CORE/APP/Services/Authentication/AuthServiceBase.cs
 
