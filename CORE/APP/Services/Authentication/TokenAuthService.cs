@@ -9,12 +9,11 @@ using System.Text;
 namespace CORE.APP.Services.Authentication
 {
     /// <summary>
-    /// Inherits from the base AuthServiceBase class to use getting claims of a user operation and implements ITokenAuthService interface.
     /// Provides concrete implementations for token-based authentication operations, including
     /// generating token response with JWT (access token) and refresh token, generating refresh token, and extracting claims from access token (JWT).
     /// This service is responsible for securely creating and validating JWT used in authentication flows.
     /// </summary>
-    public class TokenAuthService : AuthServiceBase, ITokenAuthService
+    public class TokenAuthService : ITokenAuthService
     {
         /// <summary>
         /// Returns a token response including JWT (access token) and refresh token.
@@ -31,8 +30,16 @@ namespace CORE.APP.Services.Authentication
         public TokenResponse GetTokenResponse(int userId, string userName, string[] userRoleNames, DateTime expiration, 
             string securityKey, string issuer, string audience, string refreshToken)
         {
-            // Generate claims.
-            var claims = GetClaims(userId, userName, userRoleNames);
+            // Create claims for user ID and username, then add claims for each user role.
+            var claims = new List<Claim>()
+            {
+                new Claim("Id", userId.ToString()), // custom claim with key Id and value user ID
+                new Claim(ClaimTypes.Name, userName)
+            };
+            foreach (var userRoleName in userRoleNames)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, userRoleName));
+            }
 
             // Create signing credentials using the provided security key.
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));

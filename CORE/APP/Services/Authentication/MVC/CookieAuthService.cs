@@ -7,9 +7,8 @@ namespace CORE.APP.Services.Authentication.MVC
 {
     /// <summary>
     /// Provides cookie-based authentication services for signing in and signing out users.
-    /// Inherits from <see cref="AuthServiceBase"/> to utilize claim generation logic.
     /// </summary>
-    public class CookieAuthService : AuthServiceBase, ICookieAuthService
+    public class CookieAuthService : ICookieAuthService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -33,8 +32,16 @@ namespace CORE.APP.Services.Authentication.MVC
         /// <returns>A task representing the asynchronous sign-in operation.</returns>
         public async Task SignIn(int userId, string userName, string[] userRoleNames, DateTime? expiration = default, bool isPersistent = true)
         {
-            // Generate claims for the user based on their ID, username, and roles.
-            var claims = GetClaims(userId, userName, userRoleNames);
+            // Create claims for user ID and username, then add claims for each user role.
+            var claims = new List<Claim>()
+            {
+                new Claim("Id", userId.ToString()), // custom claim with key Id and value user ID
+                new Claim(ClaimTypes.Name, userName)
+            };
+            foreach (var userRoleName in userRoleNames)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, userRoleName));
+            }
 
             // Create a ClaimsIdentity with the generated claims and specify the authentication scheme.
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
